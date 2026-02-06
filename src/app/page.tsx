@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -9,120 +9,32 @@ import {
   Lock, 
   Zap, 
   CheckCircle2, 
-  Circle, 
   ExternalLink, 
   Gift, 
-  Cpu,
-  Fingerprint,
-  Ghost,
   BookOpen
 } from 'lucide-react';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
-import { LessonModal } from '@/components/LessonModal';
+import { CURRICULUM } from '@/lib/curriculum';
+import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 
 function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-const CURRICULUM = [
-  {
-    id: 1,
-    title: "Burner Strategy",
-    description: "Learn to separate your digital identities using temporary wallets.",
-    reward: "10 PRIV",
-    icon: <Ghost className="w-6 h-6" />,
-    externalLink: "https://solana.com/docs/intro/wallets",
-    steps: [
-      "Install a secondary browser extension or use a 'Private' window.",
-      "Create a new wallet phrase (never reuse your main seed).",
-      "Fund only from non-linked sources (like a new CEX account).",
-      "Use this wallet for early-stage dApps or experimental trades."
-    ],
-    fullContent: (
-      <>
-        <p>In the world of Solana, your wallet address is your public identity. Every transaction is a permanent link in a chain that anyone can audit.</p>
-        <p>The <strong>Burner Strategy</strong> is the first line of defense. By using a disposable wallet for high-risk or new interactions, you ensure that if your burner is compromised, your main "cold" storage remains invisible and safe.</p>
-      </>
-    )
-  },
-  {
-    id: 2,
-    title: "Shielded IPs",
-    description: "Stop leaking your physical location with every transaction.",
-    reward: "20 PRIV",
-    icon: <Shield className="w-6 h-6" />,
-    externalLink: "https://www.privacytools.io/privacy-vpn",
-    steps: [
-      "Choose a VPN provider that does not log user activity.",
-      "Enable 'Kill Switch' to prevent accidental leaks if VPN drops.",
-      "Prefer WireGuard protocols for faster, encrypted connections.",
-      "Switch servers frequently to avoid being profiled by a single IP."
-    ],
-    fullContent: (
-      <>
-        <p>When you send a transaction, your computer talks to an RPC node. Without a VPN, that node sees your <strong>Real IP Address</strong> and can link it to your wallet.</p>
-        <p>Privacy-focused VPNs mask your location and encrypt your traffic, preventing ISPs and node providers from building a profile of who you are based on where you trade from.</p>
-      </>
-    )
-  },
-  {
-    id: 3,
-    title: "RPC Privacy",
-    description: "Take control of the pipes that carry your data.",
-    reward: "30 PRIV",
-    icon: <Cpu className="w-6 h-6" />,
-    externalLink: "https://docs.solana.com/cluster/rpc-endpoints",
-    steps: [
-      "Go to your wallet settings (e.g., Phantom > Settings > Network).",
-      "Choose 'Custom RPC' instead of the default Public Mainnet.",
-      "Enter the URL of a privacy-preserving RPC provider.",
-      "Monitor your connection speed to ensure stability."
-    ],
-    fullContent: (
-      <>
-        <p>Public RPC endpoints are often congested and highly monitored. By switching to a <strong>Private or Custom RPC</strong>, you reduce your footprint on the network.</p>
-        <p>Some premium RPCs offer "Privacy Mode" which scrubs your IP and metadata before broadcasting your transaction to the Solana validators.</p>
-      </>
-    )
-  },
-  {
-    id: 4,
-    title: "Dark Pool Liquidity",
-    description: "Understand confidential trading via Anoncoin protocols.",
-    reward: "40 PRIV",
-    icon: <Lock className="w-6 h-6" />,
-    steps: [
-      "Understand the difference between 'Public Orderbooks' and 'Dark Pools'.",
-      "Learn how Anoncoin keeps trades confidential until they are settled.",
-      "Analyze how front-running (MEV) attacks are mitigated in dark pools.",
-      "Simulate a trade that remains invisible to public explorers."
-    ],
-    fullContent: (
-      <>
-        <p>Anoncoin enables <strong>Dark Liquidity Pools</strong> on Solana. Unlike standard exchanges where everyone can see your buy/sell orders, Dark Pools keep them hidden.</p>
-        <p>This prevents predatory bots from front-running your trades and ensures you get the best price for your transaction without moving the market prematurely.</p>
-      </>
-    )
-  }
-];
-
-export default function Home() {
+function HomeContent() {
   const { connected, publicKey } = useWallet();
-  const [completedTasks, setCompletedTasks] = useState<number[]>([]);
+  const searchParams = useSearchParams();
+  const [completedTasks, setCompletedTasks] = useState<string[]>([]);
   const [isMinting, setIsMinting] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
-  const [selectedLesson, setSelectedLesson] = useState<typeof CURRICULUM[0] | null>(null);
-  const [verifying, setVerifying] = useState<number | null>(null);
 
-  const handleVerifyLesson = (id: number) => {
-    setVerifying(id);
-    setTimeout(() => {
-      setCompletedTasks(prev => [...prev, id]);
-      setVerifying(null);
-      setSelectedLesson(null);
-    }, 2000);
-  };
+  // Sync progress from localStorage
+  useEffect(() => {
+    const saved = JSON.parse(localStorage.getItem('completed_lessons') || '[]');
+    setCompletedTasks(saved);
+  }, [searchParams]);
 
   const progress = (completedTasks.length / CURRICULUM.length) * 100;
   const allCompleted = completedTasks.length === CURRICULUM.length;
@@ -195,7 +107,7 @@ export default function Home() {
             Privacy is <span className="text-green-400 italic">Normal</span>.
           </h1>
           <p className="text-lg text-gray-400 max-w-2xl mx-auto mb-10 leading-relaxed">
-            Privacy is a fundamental right. Complete the tasks below to learn the essentials of cypherpunk operations and earn <span className="text-white font-mono">$PRIV</span> rewards.
+            Privacy is a fundamental right. Complete the slide-based lessons below to learn the essentials of cypherpunk operations and earn <span className="text-white font-mono">$PRIV</span> rewards.
           </p>
         </motion.div>
 
@@ -221,57 +133,57 @@ export default function Home() {
         {/* Tasks Grid */}
         <div className="grid md:grid-cols-2 gap-6 text-left">
           {CURRICULUM.map((lesson, idx) => (
-            <motion.div
-              key={lesson.id}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: idx * 0.1 }}
-              onClick={() => setSelectedLesson(lesson)}
-              className={cn(
-                "group relative p-6 rounded-2xl border transition-all overflow-hidden cursor-pointer",
-                completedTasks.includes(lesson.id) 
-                  ? "bg-green-500/5 border-green-500/30" 
-                  : "bg-white/[0.02] border-white/10 hover:border-white/20 hover:bg-white/[0.04]"
-              )}
-            >
-              {/* Task Content */}
-              <div className="relative z-10 flex gap-5">
-                <div className={cn(
-                  "p-3 rounded-xl border transition-colors h-fit",
-                  completedTasks.includes(lesson.id)
-                    ? "bg-green-500/20 border-green-500/30 text-green-400"
-                    : "bg-white/5 border-white/10 text-gray-400"
-                )}>
-                  {lesson.icon}
-                </div>
-                <div className="flex-1">
-                  <div className="flex items-center gap-2 mb-2">
-                    <h3 className="font-bold text-xl">{lesson.title}</h3>
-                    {completedTasks.includes(lesson.id) && <CheckCircle2 className="w-5 h-5 text-green-400" />}
+            <Link key={lesson.id} href={`/lessons/${lesson.id}`}>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: idx * 0.1 }}
+                className={cn(
+                  "group relative p-6 rounded-2xl border transition-all overflow-hidden cursor-pointer h-full",
+                  completedTasks.includes(lesson.id) 
+                    ? "bg-green-500/5 border-green-500/30" 
+                    : "bg-white/[0.02] border-white/10 hover:border-white/20 hover:bg-white/[0.04]"
+                )}
+              >
+                {/* Task Content */}
+                <div className="relative z-10 flex gap-5">
+                  <div className={cn(
+                    "p-3 rounded-xl border transition-colors h-fit",
+                    completedTasks.includes(lesson.id)
+                      ? "bg-green-500/20 border-green-500/30 text-green-400"
+                      : "bg-white/5 border-white/10 text-gray-400"
+                  )}>
+                    <lesson.icon className="w-6 h-6" />
                   </div>
-                  <p className="text-gray-400 text-sm mb-6 leading-relaxed italic line-clamp-2">
-                    {lesson.description}
-                  </p>
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2 text-xs font-mono text-purple-400 bg-purple-400/10 px-2 py-1 rounded">
-                      <Gift className="w-3 h-3" />
-                      REWARD: {lesson.reward}
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2 mb-2">
+                      <h3 className="font-bold text-xl">{lesson.title}</h3>
+                      {completedTasks.includes(lesson.id) && <CheckCircle2 className="w-5 h-5 text-green-400" />}
                     </div>
-                    {!completedTasks.includes(lesson.id) && (
-                      <span className="text-xs font-bold text-white/50 group-hover:text-white transition-colors flex items-center gap-1">
-                        START LESSON
-                        <BookOpen className="w-3 h-3" />
-                      </span>
-                    )}
+                    <p className="text-gray-400 text-sm mb-6 leading-relaxed italic line-clamp-2">
+                      {lesson.description}
+                    </p>
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2 text-xs font-mono text-purple-400 bg-purple-400/10 px-2 py-1 rounded">
+                        <Gift className="w-3 h-3" />
+                        REWARD: {lesson.reward}
+                      </div>
+                      {!completedTasks.includes(lesson.id) && (
+                        <span className="text-xs font-bold text-white/50 group-hover:text-white transition-colors flex items-center gap-1">
+                          START SLIDES
+                          <BookOpen className="w-3 h-3" />
+                        </span>
+                      )}
+                    </div>
                   </div>
                 </div>
-              </div>
-              
-              {/* Hover Effect */}
-              {!completedTasks.includes(lesson.id) && (
-                <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
-              )}
-            </motion.div>
+                
+                {/* Hover Effect */}
+                {!completedTasks.includes(lesson.id) && (
+                  <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
+                )}
+              </motion.div>
+            </Link>
           ))}
         </div>
 
@@ -331,16 +243,6 @@ export default function Home() {
         </motion.div>
       </section>
 
-      {/* Lesson Modal */}
-      <LessonModal 
-        isOpen={!!selectedLesson}
-        onClose={() => setSelectedLesson(null)}
-        lesson={selectedLesson}
-        isCompleted={selectedLesson ? completedTasks.includes(selectedLesson.id) : false}
-        onVerify={handleVerifyLesson}
-        verifying={verifying !== null}
-      />
-
       {/* Success Modal */}
       <AnimatePresence>
         {showSuccess && (
@@ -380,5 +282,17 @@ export default function Home() {
         &copy; 2026 PRIVACY101 • BUILT FOR SOLANA PRIVACY HACKATHON
       </footer>
     </main>
+  );
+}
+
+export default function Home() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-black flex items-center justify-center">
+        <div className="w-10 h-10 border-2 border-purple-500 border-t-transparent rounded-full animate-spin" />
+      </div>
+    }>
+      <HomeContent />
+    </Suspense>
   );
 }
