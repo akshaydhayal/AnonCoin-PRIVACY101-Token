@@ -18,6 +18,8 @@ import { twMerge } from 'tailwind-merge';
 import { CURRICULUM } from '@/lib/curriculum';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
+import { usePrivacyProgram } from '@/hooks/usePrivacyProgram';
+import toast from 'react-hot-toast';
 
 function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -25,19 +27,79 @@ function cn(...inputs: ClassValue[]) {
 
 function HomeContent() {
   const { connected, publicKey } = useWallet();
+  const { program, getUserProgressPDA } = usePrivacyProgram();
   const searchParams = useSearchParams();
   const [completedTasks, setCompletedTasks] = useState<string[]>([]);
   const [isMinting, setIsMinting] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
+  const [hasOnChainAccount, setHasOnChainAccount] = useState<boolean | null>(null);
+  const [isInitializing, setIsInitializing] = useState(false);
 
-  // Sync progress from localStorage
+  // Sync progress from On-Chain only
   useEffect(() => {
-    const saved = JSON.parse(localStorage.getItem('completed_lessons') || '[]');
-    setCompletedTasks(saved);
-  }, [searchParams]);
+    async function fetchProgress() {
+      if (!connected || !publicKey || !program) {
+        setCompletedTasks([]);
+        return;
+      }
+
+      try {
+        const pda = getUserProgressPDA(publicKey);
+        const account = await program.account.userProgress.fetch(pda);
+        if (account) {
+          setCompletedTasks(account.completedLessons as string[]);
+          setHasOnChainAccount(true);
+        }
+      } catch (e) {
+        setHasOnChainAccount(false);
+        setCompletedTasks([]);
+      }
+    }
+    fetchProgress();
+  }, [publicKey, program, connected, searchParams]);
 
   const progress = (completedTasks.length / CURRICULUM.length) * 100;
   const allCompleted = completedTasks.length === CURRICULUM.length;
+
+  const handleInitialize = async () => {
+    if (!program || !publicKey) return;
+    setIsInitializing(true);
+    const toastId = toast.loading("Initializing your privacy profile on devnet...");
+    
+    try {
+      const pda = getUserProgressPDA(publicKey);
+      const signature = await program.methods
+        .initializeUser()
+        .accounts({
+          userProgress: pda,
+          user: publicKey,
+        } as any)
+        .rpc();
+      
+      setHasOnChainAccount(true);
+      toast.success(
+        (t) => (
+          <span>
+            Profile Initialized!{" "}
+            <a 
+              href={`https://explorer.solana.com/tx/${signature}?cluster=devnet`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-purple-400 underline ml-1"
+            >
+              View Tx
+            </a>
+          </span>
+        ),
+        { id: toastId, duration: 10000 }
+      );
+    } catch (e) {
+      console.error("Initialization error:", e);
+      toast.error("Failed to initialize on-chain progress. Ensure you have Devnet SOL.", { id: toastId });
+    } finally {
+      setIsInitializing(false);
+    }
+  };
 
   const handleClaim = async () => {
     if (!connected || !allCompleted || !publicKey) return;
@@ -61,12 +123,13 @@ function HomeContent() {
 
       if (data.status === 'success') {
         setShowSuccess(true);
+        toast.success("Airdrop verification complete! Check your wallet for the $PRIV badge.");
       } else {
-        alert(`Airdrop Error: ${data.message}`);
+        toast.error(`Airdrop Error: ${data.message}`);
       }
     } catch (error) {
       console.error('Claim Error:', error);
-      alert('Failed to initiate airdrop. Please try again.');
+      toast.error('Failed to initiate airdrop. Please try again.');
     } finally {
       setIsMinting(false);
     }
@@ -110,6 +173,37 @@ function HomeContent() {
             Privacy is a fundamental right. Complete the slide-based lessons below to learn the essentials of cypherpunk operations and earn <span className="text-white font-mono">$PRIV</span> rewards.
           </p>
         </motion.div>
+
+        {/* On-Chain Status Banner */}
+        {connected && hasOnChainAccount === false && (
+          <motion.div 
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mb-12 p-6 rounded-2xl border border-purple-500/30 bg-purple-500/5 backdrop-blur-sm flex flex-col md:flex-row items-center justify-between gap-4 text-left"
+          >
+            <div>
+              <h3 className="text-xl font-bold flex items-center gap-2">
+                <Shield className="w-5 h-5 text-purple-400" />
+                Go On-Chain
+              </h3>
+              <p className="text-gray-400 text-sm">
+                To start tracking your progress, you must initialize your <span className="text-white font-mono">UserProgress</span> PDA on Solana.
+              </p>
+            </div>
+            <button
+              onClick={handleInitialize}
+              disabled={isInitializing}
+              className="px-6 py-3 bg-purple-500 hover:bg-purple-600 text-white rounded-full font-bold transition-all flex items-center gap-2 disabled:opacity-50"
+            >
+              {isInitializing ? (
+                <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+              ) : (
+                <Zap className="w-4 h-4" />
+              )}
+              INITIALIZE ON-CHAIN
+            </button>
+          </motion.div>
+        )}
 
         {/* Progress Section */}
         <div className="mb-20">

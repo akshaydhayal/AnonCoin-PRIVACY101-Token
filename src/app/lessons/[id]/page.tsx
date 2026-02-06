@@ -6,11 +6,18 @@ import { CURRICULUM } from '@/lib/curriculum';
 import { SlideDeck } from '@/components/SlideDeck';
 import { ChevronLeft, Lock, Shield } from 'lucide-react';
 import Link from 'next/link';
+import { motion, AnimatePresence } from 'framer-motion';
+
+import { usePrivacyProgram } from '@/hooks/usePrivacyProgram';
+
+import toast from 'react-hot-toast';
 
 export default function LessonPage() {
     const params = useParams();
     const router = useRouter();
     const [lesson, setLesson] = useState<any>(null);
+    const { program, getUserProgressPDA, publicKey } = usePrivacyProgram();
+    const [isSaving, setIsSaving] = useState(false);
 
     useEffect(() => {
         const found = CURRICULUM.find(l => l.id === params.id);
@@ -21,13 +28,60 @@ export default function LessonPage() {
         }
     }, [params.id, router]);
 
-    const handleComplete = () => {
-        // Save progress to localStorage
-        const completed = JSON.parse(localStorage.getItem('completed_lessons') || '[]');
-        if (!completed.includes(lesson.id)) {
-            completed.push(lesson.id);
-            localStorage.setItem('completed_lessons', JSON.stringify(completed));
+    const handleComplete = async () => {
+        if (!program || !publicKey) {
+            toast.error("Please connect your wallet to save progress.");
+            return;
         }
+
+        setIsSaving(true);
+        const toastId = toast.loading("Finalizing your progress on-chain...");
+        
+        try {
+            const pda = getUserProgressPDA(publicKey);
+            
+            // Re-verify account existence
+            try {
+                await program.account.userProgress.fetch(pda);
+                
+                // Call completion
+                const signature = await program.methods
+                    .completeLesson(lesson.id, 100)
+                    .accounts({
+                        userProgress: pda,
+                        user: publicKey,
+                    } as any)
+                    .rpc();
+
+                toast.success(
+                    (t) => (
+                      <span>
+                        Lesson Verified!{" "}
+                        <a 
+                          href={`https://explorer.solana.com/tx/${signature}?cluster=devnet`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-purple-400 underline ml-1"
+                        >
+                          View Tx
+                        </a>
+                      </span>
+                    ),
+                    { id: toastId, duration: 10000 }
+                );
+            } catch (e) {
+                toast.error("On-chain account not found. Please initialize on the home page.", { id: toastId });
+                setIsSaving(false);
+                return;
+            }
+        } catch (e) {
+            console.error("On-chain error:", e);
+            toast.error("Failed to save progress. Ensure you have Devnet SOL.", { id: toastId });
+            setIsSaving(false);
+            return;
+        }
+
+        setIsSaving(false);
         router.push('/?completed=' + lesson.id);
     };
 
@@ -69,6 +123,20 @@ export default function LessonPage() {
             <main className="relative z-10 flex-1 flex flex-col items-center justify-center p-8 max-w-6xl mx-auto w-full">
                 <SlideDeck lesson={lesson} onComplete={handleComplete} />
             </main>
+
+            {/* Saving Overlay */}
+            <AnimatePresence>
+                {isSaving && (
+                    <motion.div 
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        className="fixed inset-0 z-[100] bg-black/80 backdrop-blur-sm flex items-center justify-center flex-col gap-4"
+                    >
+                        <div className="w-12 h-12 border-4 border-purple-500/30 border-t-purple-500 rounded-full animate-spin" />
+                        <p className="font-mono text-sm tracking-widest text-purple-400">SIGNING ON-CHAIN...</p>
+                    </motion.div>
+                )}
+            </AnimatePresence>
 
             {/* Footer */}
             <footer className="relative z-10 p-8 border-t border-white/5 text-center text-[10px] font-mono text-gray-600 uppercase tracking-[0.3em]">
