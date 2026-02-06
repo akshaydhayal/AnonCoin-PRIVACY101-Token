@@ -144,7 +144,7 @@ function HomeContent() {
         <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 brightness-50 contrast-150 pointer-events-none" />
       </div>
 
-      <nav className="relative z-10 flex items-center justify-between px-8 py-6 border-b border-white/5 backdrop-blur-md">
+      <nav className="relative z-10 flex items-center justify-between px-8 py-2 border-b border-white/5 backdrop-blur-md">
         <div className="flex items-center gap-2">
           <div className="p-2 bg-gradient-to-br from-purple-500 to-green-500 rounded-lg shadow-lg shadow-purple-500/20">
             <Lock className="w-6 h-6 text-black" />
@@ -156,20 +156,20 @@ function HomeContent() {
         <WalletMultiButton className="!bg-white/5 !border !border-white/10 hover:!bg-white/10 !transition-all !rounded-full !h-10 !px-6 !text-sm" />
       </nav>
 
-      <section className="relative z-10 max-w-5xl mx-auto px-6 py-20 text-center">
+      <section className="relative z-10 max-w-5xl mx-auto px-6 py-0 text-center">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
         >
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-500/10 border border-purple-500/20 text-purple-400 text-xs font-medium mb-6">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-500/10 border border-purple-500/20 text-purple-400 text-xs font-medium mb-0">
             <Zap className="w-3 h-3 fill-current" />
             <span>POWERED BY ANONCOIN</span>
           </div>
-          <h1 className="text-6xl md:text-8xl font-bold tracking-tighter mb-6 bg-clip-text text-transparent bg-gradient-to-b from-white via-white to-white/40 leading-tight">
+          <h1 className="text-6xl md:text-8xl font-bold tracking-tighter mb-1 bg-clip-text text-transparent bg-gradient-to-b from-white via-white to-white/40 leading-tight">
             Privacy is <span className="text-green-400 italic">Normal</span>.
           </h1>
-          <p className="text-lg text-gray-400 max-w-2xl mx-auto mb-10 leading-relaxed">
+          <p className="text-lg text-gray-400 max-w-2xl mx-auto mb-6 leading-relaxed">
             Privacy is a fundamental right. Complete the slide-based lessons below to learn the essentials of cypherpunk operations and earn <span className="text-white font-mono">$PRIV</span> rewards.
           </p>
         </motion.div>
@@ -206,8 +206,8 @@ function HomeContent() {
         )}
 
         {/* Progress Section */}
-        <div className="mb-20">
-          <div className="flex justify-between items-end mb-4">
+        <div className="mb-4">
+          <div className="flex justify-between items-end mb-1">
             <div className="text-left">
               <span className="text-sm font-mono text-gray-500 block mb-1">CURRICULUM PROGRESS</span>
               <span className="text-2xl font-bold">{completedTasks.length} / {CURRICULUM.length} LESSONS</span>
@@ -233,16 +233,16 @@ function HomeContent() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: idx * 0.1 }}
                 className={cn(
-                  "group relative p-6 rounded-2xl border transition-all overflow-hidden cursor-pointer h-full",
+                  "group relative p-5 rounded-2xl border transition-all overflow-hidden cursor-pointer h-full",
                   completedTasks.includes(lesson.id) 
                     ? "bg-green-500/5 border-green-500/30" 
                     : "bg-white/[0.02] border-white/10 hover:border-white/20 hover:bg-white/[0.04]"
                 )}
               >
                 {/* Task Content */}
-                <div className="relative z-10 flex gap-5">
+                <div className="relative z-10 flex gap-4">
                   <div className={cn(
-                    "p-3 rounded-xl border transition-colors h-fit",
+                    "p-2 rounded-xl border transition-colors h-fit",
                     completedTasks.includes(lesson.id)
                       ? "bg-green-500/20 border-green-500/30 text-green-400"
                       : "bg-white/5 border-white/10 text-gray-400"
@@ -251,10 +251,10 @@ function HomeContent() {
                   </div>
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-2">
-                      <h3 className="font-bold text-xl">{lesson.title}</h3>
+                      <h3 className="font-bold text-lg">{lesson.title}</h3>
                       {completedTasks.includes(lesson.id) && <CheckCircle2 className="w-5 h-5 text-green-400" />}
                     </div>
-                    <p className="text-gray-400 text-sm mb-6 leading-relaxed italic line-clamp-2">
+                    <p className="text-gray-400 text-sm mb-3 leading-relaxed italic line-clamp-2">
                       {lesson.description}
                     </p>
                     <div className="flex items-center justify-between">
@@ -283,15 +283,15 @@ function HomeContent() {
 
         {/* Call to Action */}
         <motion.div 
-          className="mt-20 py-20 px-8 rounded-3xl border border-white/10 bg-white/[0.01] backdrop-blur-sm overflow-hidden relative"
+          className="mt-12 py-4 px-8 rounded-3xl border border-white/10 bg-white/[0.01] backdrop-blur-sm overflow-hidden relative"
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
         >
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[1px] bg-gradient-to-r from-transparent via-purple-500/50 to-transparent" />
           
-          <h2 className="text-4xl font-bold mb-4">Ready to Claim?</h2>
-          <p className="text-gray-400 mb-8 max-w-md mx-auto">
+          <h2 className="text-2xl font-bold mb-2">Ready to Claim?</h2>
+          <p className="text-gray-400 mb-1 max-w-lg mx-auto">
             Once all lessons are complete, you can mint your limited edition <span className="text-white font-mono">PRIVACY101</span> badge and receive your <span className="text-white font-mono">$PRIV</span> token airdrop.
           </p>
 
@@ -304,7 +304,7 @@ function HomeContent() {
               disabled={!allCompleted || isMinting}
               onClick={handleClaim}
               className={cn(
-                "relative group px-12 py-4 rounded-full font-bold text-lg transition-all overflow-hidden",
+                "relative group px-10 py-3.5 rounded-full font-bold transition-all overflow-hidden",
                 allCompleted 
                   ? "bg-gradient-to-r from-purple-500 to-green-500 text-white shadow-lg shadow-purple-500/20 hover:scale-105 active:scale-95" 
                   : "bg-white/5 text-gray-500 cursor-not-allowed border border-white/10"
@@ -372,7 +372,7 @@ function HomeContent() {
         )}
       </AnimatePresence>
 
-      <footer className="relative z-10 py-10 px-8 border-t border-white/5 text-center text-gray-600 text-sm font-mono uppercase tracking-[0.2em]">
+      <footer className="relative z-10 py-4 px-8 border-t border-white/5 text-center text-gray-600 text-sm font-mono uppercase tracking-[0.2em]">
         &copy; 2026 PRIVACY101 • BUILT FOR SOLANA PRIVACY HACKATHON
       </footer>
     </main>
