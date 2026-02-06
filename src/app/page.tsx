@@ -14,46 +14,96 @@ import {
   Gift, 
   Cpu,
   Fingerprint,
-  Ghost
+  Ghost,
+  BookOpen
 } from 'lucide-react';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
+import { LessonModal } from '@/components/LessonModal';
 
 function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-const TASKS = [
+const CURRICULUM = [
   {
     id: 1,
-    title: "The Burner Strategy",
-    description: "Initialize a burner wallet for high-risk interactions. Never compromise your main stash.",
-    icon: <Ghost className="w-6 h-6" />,
-    link: "https://solana.com/docs/intro/wallets",
+    title: "Burner Strategy",
+    description: "Learn to separate your digital identities using temporary wallets.",
     reward: "10 PRIV",
+    icon: <Ghost className="w-6 h-6" />,
+    externalLink: "https://solana.com/docs/intro/wallets",
+    steps: [
+      "Install a secondary browser extension or use a 'Private' window.",
+      "Create a new wallet phrase (never reuse your main seed).",
+      "Fund only from non-linked sources (like a new CEX account).",
+      "Use this wallet for early-stage dApps or experimental trades."
+    ],
+    fullContent: (
+      <>
+        <p>In the world of Solana, your wallet address is your public identity. Every transaction is a permanent link in a chain that anyone can audit.</p>
+        <p>The <strong>Burner Strategy</strong> is the first line of defense. By using a disposable wallet for high-risk or new interactions, you ensure that if your burner is compromised, your main "cold" storage remains invisible and safe.</p>
+      </>
+    )
   },
   {
     id: 2,
-    title: "VPN Shielding",
-    description: "Learn why IP masking is essential for blockchain privacy. Set up a privacy-focused VPN.",
-    icon: <Shield className="w-6 h-6" />,
-    link: "https://www.privacytools.io/privacy-vpn",
+    title: "Shielded IPs",
+    description: "Stop leaking your physical location with every transaction.",
     reward: "20 PRIV",
+    icon: <Shield className="w-6 h-6" />,
+    externalLink: "https://www.privacytools.io/privacy-vpn",
+    steps: [
+      "Choose a VPN provider that does not log user activity.",
+      "Enable 'Kill Switch' to prevent accidental leaks if VPN drops.",
+      "Prefer WireGuard protocols for faster, encrypted connections.",
+      "Switch servers frequently to avoid being profiled by a single IP."
+    ],
+    fullContent: (
+      <>
+        <p>When you send a transaction, your computer talks to an RPC node. Without a VPN, that node sees your <strong>Real IP Address</strong> and can link it to your wallet.</p>
+        <p>Privacy-focused VPNs mask your location and encrypt your traffic, preventing ISPs and node providers from building a profile of who you are based on where you trade from.</p>
+      </>
+    )
   },
   {
     id: 3,
     title: "RPC Privacy",
-    description: "Use private RPC endpoints to prevent node providers from tracking your transaction history.",
-    icon: <Cpu className="w-6 h-6" />,
-    link: "https://docs.solana.com/cluster/rpc-endpoints",
+    description: "Take control of the pipes that carry your data.",
     reward: "30 PRIV",
+    icon: <Cpu className="w-6 h-6" />,
+    externalLink: "https://docs.solana.com/cluster/rpc-endpoints",
+    steps: [
+      "Go to your wallet settings (e.g., Phantom > Settings > Network).",
+      "Choose 'Custom RPC' instead of the default Public Mainnet.",
+      "Enter the URL of a privacy-preserving RPC provider.",
+      "Monitor your connection speed to ensure stability."
+    ],
+    fullContent: (
+      <>
+        <p>Public RPC endpoints are often congested and highly monitored. By switching to a <strong>Private or Custom RPC</strong>, you reduce your footprint on the network.</p>
+        <p>Some premium RPCs offer "Privacy Mode" which scrubs your IP and metadata before broadcasting your transaction to the Solana validators.</p>
+      </>
+    )
   },
   {
     id: 4,
-    title: "Metadata Scrubbing",
-    description: "Remove revealing metadata from your on-chain identity and social profiles.",
-    icon: <Fingerprint className="w-6 h-6" />,
+    title: "Dark Pool Liquidity",
+    description: "Understand confidential trading via Anoncoin protocols.",
     reward: "40 PRIV",
+    icon: <Lock className="w-6 h-6" />,
+    steps: [
+      "Understand the difference between 'Public Orderbooks' and 'Dark Pools'.",
+      "Learn how Anoncoin keeps trades confidential until they are settled.",
+      "Analyze how front-running (MEV) attacks are mitigated in dark pools.",
+      "Simulate a trade that remains invisible to public explorers."
+    ],
+    fullContent: (
+      <>
+        <p>Anoncoin enables <strong>Dark Liquidity Pools</strong> on Solana. Unlike standard exchanges where everyone can see your buy/sell orders, Dark Pools keep them hidden.</p>
+        <p>This prevents predatory bots from front-running your trades and ensures you get the best price for your transaction without moving the market prematurely.</p>
+      </>
+    )
   }
 ];
 
@@ -62,23 +112,20 @@ export default function Home() {
   const [completedTasks, setCompletedTasks] = useState<number[]>([]);
   const [isMinting, setIsMinting] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
-
+  const [selectedLesson, setSelectedLesson] = useState<typeof CURRICULUM[0] | null>(null);
   const [verifying, setVerifying] = useState<number | null>(null);
 
-  const toggleTask = (id: number) => {
-    if (completedTasks.includes(id)) {
-      setCompletedTasks(completedTasks.filter(tid => tid !== id));
-    } else {
-      setVerifying(id);
-      setTimeout(() => {
-        setCompletedTasks([...completedTasks, id]);
-        setVerifying(null);
-      }, 1500);
-    }
+  const handleVerifyLesson = (id: number) => {
+    setVerifying(id);
+    setTimeout(() => {
+      setCompletedTasks(prev => [...prev, id]);
+      setVerifying(null);
+      setSelectedLesson(null);
+    }, 2000);
   };
 
-  const progress = (completedTasks.length / TASKS.length) * 100;
-  const allCompleted = completedTasks.length === TASKS.length;
+  const progress = (completedTasks.length / CURRICULUM.length) * 100;
+  const allCompleted = completedTasks.length === CURRICULUM.length;
 
   const handleClaim = async () => {
     if (!connected || !allCompleted || !publicKey) return;
@@ -114,12 +161,12 @@ export default function Home() {
   };
 
   return (
-    <main className="min-h-screen relative overflow-hidden">
+    <main className="min-h-screen relative overflow-hidden bg-black text-white">
       {/* Background Effects */}
       <div className="absolute inset-0 z-0">
         <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-purple-900/20 blur-[120px] rounded-full" />
         <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-green-900/10 blur-[120px] rounded-full" />
-        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 brightness-50 contrast-150" />
+        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 brightness-50 contrast-150 pointer-events-none" />
       </div>
 
       <nav className="relative z-10 flex items-center justify-between px-8 py-6 border-b border-white/5 backdrop-blur-md">
@@ -157,7 +204,7 @@ export default function Home() {
           <div className="flex justify-between items-end mb-4">
             <div className="text-left">
               <span className="text-sm font-mono text-gray-500 block mb-1">CURRICULUM PROGRESS</span>
-              <span className="text-2xl font-bold">{completedTasks.length} / {TASKS.length} LESSONS</span>
+              <span className="text-2xl font-bold">{completedTasks.length} / {CURRICULUM.length} LESSONS</span>
             </div>
             <span className="text-sm font-mono text-green-400">{Math.round(progress)}% COMPLETE</span>
           </div>
@@ -173,79 +220,55 @@ export default function Home() {
 
         {/* Tasks Grid */}
         <div className="grid md:grid-cols-2 gap-6 text-left">
-          {TASKS.map((task, idx) => (
+          {CURRICULUM.map((lesson, idx) => (
             <motion.div
-              key={task.id}
+              key={lesson.id}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: idx * 0.1 }}
+              onClick={() => setSelectedLesson(lesson)}
               className={cn(
-                "group relative p-6 rounded-2xl border transition-all overflow-hidden",
-                completedTasks.includes(task.id) 
+                "group relative p-6 rounded-2xl border transition-all overflow-hidden cursor-pointer",
+                completedTasks.includes(lesson.id) 
                   ? "bg-green-500/5 border-green-500/30" 
-                  : "bg-white/[0.02] border-white/10"
+                  : "bg-white/[0.02] border-white/10 hover:border-white/20 hover:bg-white/[0.04]"
               )}
             >
               {/* Task Content */}
               <div className="relative z-10 flex gap-5">
                 <div className={cn(
                   "p-3 rounded-xl border transition-colors h-fit",
-                  completedTasks.includes(task.id)
+                  completedTasks.includes(lesson.id)
                     ? "bg-green-500/20 border-green-500/30 text-green-400"
                     : "bg-white/5 border-white/10 text-gray-400"
                 )}>
-                  {task.icon}
+                  {lesson.icon}
                 </div>
                 <div className="flex-1">
                   <div className="flex items-center gap-2 mb-2">
-                    <h3 className="font-bold text-xl">{task.title}</h3>
-                    {completedTasks.includes(task.id) && <CheckCircle2 className="w-5 h-5 text-green-400" />}
+                    <h3 className="font-bold text-xl">{lesson.title}</h3>
+                    {completedTasks.includes(lesson.id) && <CheckCircle2 className="w-5 h-5 text-green-400" />}
                   </div>
-                  <p className="text-gray-400 text-sm mb-6 leading-relaxed italic">
-                    {task.description}
+                  <p className="text-gray-400 text-sm mb-6 leading-relaxed italic line-clamp-2">
+                    {lesson.description}
                   </p>
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2 text-xs font-mono text-purple-400 bg-purple-400/10 px-2 py-1 rounded">
                       <Gift className="w-3 h-3" />
-                      REWARD: {task.reward}
+                      REWARD: {lesson.reward}
                     </div>
-                    {completedTasks.includes(task.id) ? (
-                      <button 
-                        onClick={() => toggleTask(task.id)}
-                        className="text-xs text-gray-500 hover:text-white transition-colors underline"
-                      >
-                        Reset
-                      </button>
-                    ) : (
-                      <button 
-                         disabled={verifying === task.id}
-                         onClick={() => toggleTask(task.id)}
-                         className={cn(
-                           "flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold transition-all",
-                           verifying === task.id 
-                             ? "bg-white/5 text-white/50 cursor-wait"
-                             : "bg-white text-black hover:bg-white/90"
-                         )}
-                      >
-                        {verifying === task.id ? (
-                          <>
-                            <div className="w-3 h-3 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                            VERIFYING...
-                          </>
-                        ) : (
-                          <>
-                            <ExternalLink className="w-3 h-3" />
-                            VERIFY TASK
-                          </>
-                        )}
-                      </button>
+                    {!completedTasks.includes(lesson.id) && (
+                      <span className="text-xs font-bold text-white/50 group-hover:text-white transition-colors flex items-center gap-1">
+                        START LESSON
+                        <BookOpen className="w-3 h-3" />
+                      </span>
                     )}
                   </div>
                 </div>
               </div>
               
               {/* Hover Effect */}
-              {!completedTasks.includes(task.id) && (
+              {!completedTasks.includes(lesson.id) && (
                 <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
               )}
             </motion.div>
@@ -308,6 +331,16 @@ export default function Home() {
         </motion.div>
       </section>
 
+      {/* Lesson Modal */}
+      <LessonModal 
+        isOpen={!!selectedLesson}
+        onClose={() => setSelectedLesson(null)}
+        lesson={selectedLesson}
+        isCompleted={selectedLesson ? completedTasks.includes(selectedLesson.id) : false}
+        onVerify={handleVerifyLesson}
+        verifying={verifying !== null}
+      />
+
       {/* Success Modal */}
       <AnimatePresence>
         {showSuccess && (
@@ -315,7 +348,7 @@ export default function Home() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center p-6 backdrop-blur-xl bg-black/60"
+            className="fixed inset-0 z-[110] flex items-center justify-center p-6 backdrop-blur-xl bg-black/60"
           >
             <motion.div 
               initial={{ scale: 0.9, opacity: 0 }}
