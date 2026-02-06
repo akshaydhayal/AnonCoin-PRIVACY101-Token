@@ -97,30 +97,30 @@ export default function LessonPage() {
             </div>
 
             {/* Header */}
-            <header className="relative z-10 p-8 flex items-center justify-between border-b border-white/5 backdrop-blur-md">
+            <header className="relative z-10 py-3 px-8 flex items-center justify-between border-b border-white/5 backdrop-blur-md">
                 <Link 
                     href="/"
                     className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors group"
                 >
-                    <ChevronLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
-                    <span className="font-mono text-xs uppercase tracking-widest">Quit Lesson</span>
+                    <ChevronLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
+                    <span className="font-mono text-[10px] uppercase tracking-widest">Back</span>
                 </Link>
                 
-                <div className="flex items-center gap-3">
-                    <div className="p-2 bg-gradient-to-br from-purple-500 to-green-500 rounded-lg shadow-lg shadow-purple-500/20">
-                        <Lock className="w-5 h-5 text-black" />
+                <div className="flex items-center gap-2">
+                    <div className="p-1.5 bg-gradient-to-br from-purple-500 to-green-500 rounded-lg shadow-lg shadow-purple-500/10">
+                        <Lock className="w-4 h-4 text-black" />
                     </div>
-                    <span className="font-bold tracking-tighter text-xl">PRIVACY101</span>
+                    <span className="font-bold tracking-tighter text-lg">PRIVACY101</span>
                 </div>
 
-                <div className="flex items-center gap-2">
-                    <Shield className="w-5 h-5 text-green-400" />
-                    <span className="font-mono text-xs text-green-400 uppercase tracking-widest">Enrolled</span>
+                <div className="flex items-center gap-2 opacity-60">
+                    <Shield className="w-4 h-4 text-green-400" />
+                    <span className="font-mono text-[10px] text-green-400 uppercase tracking-widest">Protected</span>
                 </div>
             </header>
 
             {/* Main Content */}
-            <main className="relative z-10 flex-1 flex flex-col items-center justify-center p-8 max-w-6xl mx-auto w-full">
+            <main className="relative z-10 flex-1 flex flex-col items-center justify-center p-4 max-w-6xl mx-auto w-full">
                 <SlideDeck lesson={lesson} onComplete={handleComplete} />
             </main>
 
@@ -139,7 +139,7 @@ export default function LessonPage() {
             </AnimatePresence>
 
             {/* Footer */}
-            <footer className="relative z-10 p-8 border-t border-white/5 text-center text-[10px] font-mono text-gray-600 uppercase tracking-[0.3em]">
+            <footer className="relative z-10 py-3 px-8 border-t border-white/5 text-center text-[9px] font-mono text-gray-600 uppercase tracking-[0.3em]">
                 Secure Learning Environment • End-to-End Encrypted
             </footer>
         </div>

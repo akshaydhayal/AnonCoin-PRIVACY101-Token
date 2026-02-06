@@ -36,12 +36,12 @@ export const CURRICULUM: LessonData[] = [
       {
         title: "The Illusion of Anonymity",
         type: "content",
-        content: "Most users think Bitcoin and Solana are anonymous. They aren't. They are pseudonymous. Every transaction you've ever made is linked to your public address, creating a transparent web of your financial life."
+        content: "Most users mistakenly believe that blockchains like Bitcoin and Solana are anonymous by design. In reality, they are pseudonymous. While your real-world name isn't directly attached to your transactions, every move you've ever made is permanently recorded and linked to your public address. This creates a transparent, immutable web of your entire financial life that anyone with an explorer can analyze."
       },
       {
         title: "What is a Burner Wallet?",
         type: "infographic",
-        content: "A burner wallet is a temporary, disposable wallet used for a single purpose or a limited time. It's like a 'burner phone' for the blockchain.",
+        content: "A burner wallet is a temporary, disposable wallet generated for a single high-risk interaction or a limited window of time. Think of it as a 'digital airlock'—it sits between your main assets and the experimental wilderness of DeFi, ensuring that even if the burner is compromised, your core holdings remain untouched and unlinked.",
         infographic: "burner-concept"
       },
       {
@@ -100,7 +100,7 @@ export const CURRICULUM: LessonData[] = [
       {
         title: "The Silent Leak",
         type: "content",
-        content: "Every time your wallet app fetches your balance or sends a transaction, it talks to a server. That server sees your IP address. Your IP address is your home address in the digital world."
+        content: "Every time your wallet app fetches your balance, updates a price, or sends a transaction, it communicates with a remote server. By default, that server sees your unique IP address—the digital equivalent of your physical home address. Without protection, your every financial inquiry is stamped with your location, allowing observers to map your virtual wealth to your physical identity."
       },
       {
         title: "IP to Identity",
@@ -148,7 +148,7 @@ export const CURRICULUM: LessonData[] = [
       {
         title: "What is an RPC?",
         type: "content",
-        content: "Remote Procedure Call (RPC) nodes are the gateway to the blockchain. When your wallet says 'Sending...', it's actually pushing data to an RPC node to be broadcasted to the network."
+        content: "Remote Procedure Call (RPC) nodes are the essential traffic controllers of the blockchain world. When your wallet displays 'Sending...', it isn't talking directly to the entire network; it's pushing your transaction data to an RPC node, which then validates and broadcasts it. Whoever controls that node controls the lens through which you see the blockchain—and the lens through which the blockchain sees you."
       },
       {
         title: "The Problem with Public RPCs",
@@ -195,7 +195,7 @@ export const CURRICULUM: LessonData[] = [
       {
         title: "The Glass House",
         type: "content",
-        content: "On a standard DEX (like Raydium), every limit order you place is public. Bots can see your trade before it's filled and 'front-run' you, making you pay a higher price."
+        content: "On a standard decentralized exchange (DEX), every limit order and swap intent is broadcast to a public 'mempool' or order book. This transparency is a double-edged sword: specialized MEV bots monitor these public signals in real-time, effectively 'front-running' your trades by jumping ahead of you in the block, forcing you to execute at a worse price while they pocket the difference."
       },
       {
         title: "What is a Dark Pool?",

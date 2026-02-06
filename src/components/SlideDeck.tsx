@@ -82,16 +82,16 @@ export const Quiz: React.FC<{
             <motion.div 
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
-                className="text-center p-12 bg-white/[0.02] border border-white/10 rounded-3xl"
+                className="text-center p-8 bg-white/[0.02] border border-white/10 rounded-3xl"
             >
-                <div className="w-20 h-20 bg-green-500/20 border border-green-500/30 rounded-full flex items-center justify-center mx-auto mb-6">
-                    <Trophy className="w-10 h-10 text-green-400" />
+                <div className="w-16 h-16 bg-green-500/20 border border-green-500/30 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <Trophy className="w-8 h-8 text-green-400" />
                 </div>
-                <h3 className="text-3xl font-bold mb-2">Knowledge Confirmed!</h3>
-                <p className="text-gray-400 mb-8">You scored {score} out of {questions.length}</p>
+                <h3 className="text-2xl font-bold mb-2">Knowledge Confirmed!</h3>
+                <p className="text-gray-400 mb-6">You scored {score} out of {questions.length}</p>
                 <button 
                     onClick={onComplete}
-                    className="px-12 py-4 bg-white text-black rounded-full font-bold hover:opacity-90 transition-all"
+                    className="px-10 py-3.5 bg-white text-black rounded-full font-bold hover:opacity-90 transition-all text-sm"
                 >
                     CLAIM LESSON REWARD
                 </button>
@@ -102,37 +102,37 @@ export const Quiz: React.FC<{
     const q = questions[currentQuestion];
 
     return (
-        <div className="max-w-xl mx-auto">
-            <div className="flex justify-between items-center mb-8">
-                <span className="text-xs font-mono text-gray-500 uppercase tracking-widest">Question {currentQuestion + 1} / {questions.length}</span>
+        <div className="max-w-xl mx-auto py-4">
+            <div className="flex justify-between items-center mb-6">
+                <span className="text-[10px] font-mono text-gray-500 uppercase tracking-widest">Question {currentQuestion + 1} / {questions.length}</span>
                 <div className="flex gap-1">
                     {questions.map((_, i) => (
-                        <div key={i} className={cn("h-1 w-4 rounded-full transition-colors", i <= currentQuestion ? "bg-purple-500" : "bg-white/10")} />
+                        <div key={i} className={cn("h-1 w-3 rounded-full transition-colors", i <= currentQuestion ? "bg-purple-500" : "bg-white/10")} />
                     ))}
                 </div>
             </div>
 
-            <h3 className="text-2xl font-bold mb-8">{q.question}</h3>
+            <h3 className="text-xl font-bold mb-6">{q.question}</h3>
 
-            <div className="space-y-4 mb-10">
+            <div className="space-y-3 mb-3">
                 {q.options.map((option, idx) => (
                     <button
                         key={idx}
                         disabled={isAnswered}
                         onClick={() => handleAnswer(idx)}
                         className={cn(
-                            "w-full p-6 rounded-2xl border text-left transition-all relative group overflow-hidden",
+                            "w-full p-4 rounded-2xl border text-left transition-all relative group overflow-hidden",
                             !isAnswered && "bg-white/5 border-white/10 hover:border-white/20 active:scale-[0.98]",
                             isAnswered && idx === q.correctAnswer && "bg-green-500/10 border-green-500/50 text-green-400",
                             isAnswered && selectedOption === idx && idx !== q.correctAnswer && "bg-red-500/10 border-red-500/50 text-red-400",
                             isAnswered && selectedOption !== idx && idx !== q.correctAnswer && "opacity-40"
                         )}
                     >
-                        <div className="flex items-center gap-4">
-                            <span className="w-8 h-8 rounded-full border border-current flex items-center justify-center text-xs font-bold">
+                        <div className="flex items-center gap-3">
+                            <span className="w-7 h-7 rounded-full border border-current flex items-center justify-center text-[10px] font-bold">
                                 {String.fromCharCode(65 + idx)}
                             </span>
-                            <span className="font-medium">{option}</span>
+                            <span className="font-medium text-sm">{option}</span>
                         </div>
                     </button>
                 ))}
@@ -143,11 +143,11 @@ export const Quiz: React.FC<{
                     <motion.div 
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
-                        className="p-6 bg-purple-500/5 border border-purple-500/10 rounded-2xl mb-10"
+                        className="p-4 bg-purple-500/5 border border-purple-500/10 rounded-2xl mb-1"
                     >
                         <div className="flex gap-3">
-                            <AlertCircle className="w-5 h-5 text-purple-400 shrink-0 mt-0.5" />
-                            <p className="text-sm text-gray-400 leading-relaxed italic">{q.explanation}</p>
+                            <AlertCircle className="w-4 h-4 text-purple-400 shrink-0 mt-0" />
+                            <p className="text-xs text-gray-400 leading-relaxed italic">{q.explanation}</p>
                         </div>
                     </motion.div>
                 )}
@@ -156,10 +156,10 @@ export const Quiz: React.FC<{
             {isAnswered && (
                 <button
                     onClick={nextQuestion}
-                    className="w-full py-5 bg-white text-black rounded-full font-bold flex items-center justify-center gap-2 hover:opacity-90 transition-all"
+                    className="w-full py-4 bg-white text-black rounded-full font-bold flex items-center justify-center gap-2 hover:opacity-90 transition-all text-sm"
                 >
                     {currentQuestion < questions.length - 1 ? 'NEXT QUESTION' : 'FINISH QUIZ'}
-                    <ChevronRight className="w-5 h-5" />
+                    <ChevronRight className="w-4 h-4" />
                 </button>
             )}
         </div>
@@ -196,12 +196,12 @@ export const SlideDeck: React.FC<{
     const s = lesson.slides[currentSlide];
 
     return (
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-4xl mx-auto flex flex-col min-h-full">
             {/* Progress Bar */}
-            <div className="mb-12">
-                <div className="flex justify-between items-end mb-4">
-                  <span className="text-xs font-mono text-gray-500 uppercase tracking-widest">SLIDE {currentSlide + 1} OF {lesson.slides.length}</span>
-                  <span className="text-xs font-mono text-purple-400 italic">LESSON: {lesson.title}</span>
+            <div className="mb-6">
+                <div className="flex justify-between items-end mb-2">
+                  <span className="text-[10px] font-mono text-gray-500 uppercase tracking-widest">SLIDE {currentSlide + 1} / {lesson.slides.length}</span>
+                  <span className="text-[10px] font-mono text-purple-400 italic">LESSON: {lesson.title}</span>
                 </div>
                 <div className="h-1 w-full bg-white/5 rounded-full overflow-hidden">
                     <motion.div 
@@ -218,12 +218,12 @@ export const SlideDeck: React.FC<{
                     initial={{ opacity: 0, x: 20 }}
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0, x: -20 }}
-                    className="min-h-[400px]"
+                    className="flex-1"
                 >
-                    <div className="grid md:grid-cols-2 gap-12 items-center">
-                        <div>
-                            <h2 className="text-4xl font-bold mb-8 tracking-tight">{s.title}</h2>
-                            <div className="text-xl text-gray-400 leading-relaxed font-light">
+                    <div className="grid md:grid-cols-2 gap-8 items-center">
+                        <div className="py-4">
+                            <h2 className="text-2xl font-bold mb-4 tracking-tight">{s.title}</h2>
+                            <div className="text-base text-gray-400 leading-relaxed font-normal">
                                 {s.content}
                             </div>
                         </div>
@@ -231,8 +231,8 @@ export const SlideDeck: React.FC<{
                             {s.type === 'infographic' && s.infographic ? (
                                 <InfographicPlaceholder type={s.infographic} />
                             ) : (
-                                <div className="p-8 bg-white/[0.02] border border-white/10 rounded-3xl backdrop-blur-sm aspect-square flex items-center justify-center">
-                                    <lesson.icon className="w-24 h-24 text-purple-500/20" />
+                                <div className="p-6 bg-white/[0.02] border border-white/10 rounded-2xl backdrop-blur-sm aspect-video flex items-center justify-center">
+                                    <lesson.icon className="w-16 h-16 text-purple-500/20" />
                                 </div>
                             )}
                         </div>
@@ -241,23 +241,23 @@ export const SlideDeck: React.FC<{
             </AnimatePresence>
 
             {/* Controls */}
-            <div className="mt-12 flex justify-between">
+            <div className="mt-8 flex justify-between">
                 <button
                     onClick={prevSlide}
                     disabled={currentSlide === 0}
                     className={cn(
-                        "p-4 rounded-full border border-white/10 bg-white/5 transition-all",
-                        currentSlide === 0 ? "opacity-0 invisible" : "hover:bg-white/10"
+                        "p-3 rounded-full border border-white/10 bg-white/5 transition-all text-gray-400",
+                        currentSlide === 0 ? "opacity-0 invisible" : "hover:bg-white/10 hover:text-white"
                     )}
                 >
-                    <ChevronLeft className="w-6 h-6" />
+                    <ChevronLeft className="w-5 h-5" />
                 </button>
                 <button
                     onClick={nextSlide}
-                    className="px-10 py-4 bg-white text-black rounded-full font-bold flex items-center gap-2 hover:opacity-90 hover:scale-105 active:scale-95 transition-all"
+                    className="px-8 py-3 bg-white text-black rounded-full font-bold flex items-center gap-2 hover:opacity-90 hover:scale-105 active:scale-95 transition-all text-sm uppercase tracking-wider"
                 >
-                    {currentSlide < lesson.slides.length - 1 ? 'NEXT SLIDE' : 'START QUIZ'}
-                    <ChevronRight className="w-6 h-6" />
+                    {currentSlide < lesson.slides.length - 1 ? 'Next Slide' : 'Start Quiz'}
+                    <ChevronRight className="w-4 h-4" />
                 </button>
             </div>
         </div>
