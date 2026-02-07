@@ -5,7 +5,7 @@ import { PublicKey } from '@solana/web3.js';
 import { AnchorProvider, Program, Idl } from '@coral-xyz/anchor';
 import { useAnchorWallet, useConnection } from '@solana/wallet-adapter-react';
 import idlData from '@/lib/idl.json';
-import { PrivacyProgram } from '../../privacy_program/target/types/privacy_program';
+import { PrivacyProgram } from '@/lib/types/privacy_program';
 
 // Use the address from the IDL or a hardcoded one if preferred
 export const PROGRAM_ID = new PublicKey(idlData.address);
