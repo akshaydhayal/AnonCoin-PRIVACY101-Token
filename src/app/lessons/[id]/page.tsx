@@ -40,43 +40,90 @@ export default function LessonPage() {
         
         try {
             const pda = getUserProgressPDA(publicKey);
+            const { BN } = await import('@coral-xyz/anchor');
+            const rewardAmount = parseInt(lesson.reward.split(' ')[0]) || 0;
+            console.log("Claiming Reward:", rewardAmount, "$PRIVV");
             
-            // Re-verify account existence
+            // 1. Check if profile exists
+            let needsInitialization = false;
             try {
                 await program.account.userProgress.fetch(pda);
-                
-                // Call completion
-                const signature = await program.methods
-                    .completeLesson(lesson.id, 100)
-                    .accounts({
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            } catch (err: any) {
+                if (err.message?.includes("Account does not exist") || err.message?.includes("could not find account")) {
+                    needsInitialization = true;
+                } else {
+                    // It's a real error (RPC, network, etc.)
+                    throw err;
+                }
+            }
+
+            // 2. Build Transaction
+            let transaction = program.methods.completeLesson(
+                lesson.id, 
+                100, 
+                new BN(rewardAmount)
+            ).accounts({
+                userProgress: pda,
+                user: publicKey,
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            } as any);
+
+            if (needsInitialization) {
+                toast.loading("First lesson! Initializing your profile...", { id: toastId });
+                // Prepend initialization
+                transaction = program.methods.completeLesson(
+                    lesson.id, 
+                    100, 
+                    new BN(rewardAmount)
+                ).accounts({
+                    userProgress: pda,
+                    user: publicKey,
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                } as any).preInstructions([
+                    await program.methods.initializeUser().accounts({
                         userProgress: pda,
                         user: publicKey,
+                        // @ts-expect-error - anchor web3 is available
+                        systemProgram: program.provider.opts.anchor?.web3.SystemProgram.programId || "11111111111111111111111111111111",
                     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                    } as any)
-                    .rpc();
-
-                toast.success(
-                  <span>
-                    Lesson Verified!{" "}
-                    <a 
-                      href={`https://explorer.solana.com/tx/${signature}?cluster=devnet`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-purple-400 underline ml-1"
-                    >
-                      View Tx
-                    </a>
-                  </span>,
-                  { id: toastId, duration: 10000 }
-                );
-            } catch {
-                toast.error("On-chain account not found. Please initialize on the home page.", { id: toastId });
-                setIsSaving(false);
-                return;
+                    } as any).instruction()
+                ]);
             }
-        } catch (error) {
-            console.error("On-chain error:", error);
-            toast.error("Failed to save progress. Ensure you have Devnet SOL.", { id: toastId });
+
+            const signature = await transaction.rpc();
+
+            toast.success(
+              <span>
+                {needsInitialization ? "Profile Ready & " : ""}Progress Saved! {rewardAmount} $PRIVV Allocated.{" "}
+                <a 
+                  href={`https://explorer.solana.com/tx/${signature}?cluster=devnet`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-purple-400 underline ml-1"
+                >
+                  View Tx
+                </a>
+              </span>,
+              { id: toastId, duration: 10000 }
+            );
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        } catch (error: any) {
+            console.error("FULL ON-CHAIN ERROR:", error);
+            
+            // Check for common Solana errors
+            let errorMessage = "Failed to save progress. Ensure you have Devnet SOL.";
+            
+            if (error.message?.includes("0x0")) {
+                errorMessage = "Transaction failed simulation. Check your Devnet SOL balance.";
+            } else if (error.message?.includes("User rejected")) {
+                errorMessage = "Transaction cancelled by user.";
+            } else if (error.logs) {
+                console.log("On-chain Logs:", error.logs);
+                errorMessage = `On-chain error: ${error.message}`;
+            }
+
+            toast.error(errorMessage, { id: toastId });
             setIsSaving(false);
             return;
         }

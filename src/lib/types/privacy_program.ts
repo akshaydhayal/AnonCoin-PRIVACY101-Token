@@ -5,7 +5,7 @@
  * IDL can be found at `target/idl/privacy_program.json`.
  */
 export type PrivacyProgram = {
-  "address": "5kC4g13p2baT5PRrmhUh7A72Thn7beDzgKHscJ32vrgQ",
+  "address": "GHTszogQs3yHDPU4L5wQDRgcnddQh2nkizuuXAoFTpqG",
   "metadata": {
     "name": "privacyProgram",
     "version": "0.1.0",
@@ -69,6 +69,10 @@ export type PrivacyProgram = {
         {
           "name": "points",
           "type": "u32"
+        },
+        {
+          "name": "rewardAmount",
+          "type": "u64"
         }
       ]
     },
@@ -162,6 +166,10 @@ export type PrivacyProgram = {
           {
             "name": "points",
             "type": "u32"
+          },
+          {
+            "name": "allocatedBalance",
+            "type": "u64"
           },
           {
             "name": "bump",

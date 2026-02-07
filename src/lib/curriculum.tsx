@@ -29,7 +29,7 @@ export const CURRICULUM: LessonData[] = [
     id: "burner-strategy",
     title: "Burner Strategy",
     description: "Learn to separate your digital identities using temporary wallets.",
-    reward: "10 PRIV",
+    reward: "10 PRIVV",
     icon: Shield,
     slides: [
       {
@@ -93,7 +93,7 @@ export const CURRICULUM: LessonData[] = [
     id: "shielded-ips",
     title: "Shielded IPs",
     description: "Stop leaking your physical location with every transaction.",
-    reward: "20 PRIV",
+    reward: "20 PRIVV",
     icon: Shield,
     slides: [
       {
@@ -141,7 +141,7 @@ export const CURRICULUM: LessonData[] = [
     id: "rpc-privacy",
     title: "RPC Privacy",
     description: "Take control of the pipes that carry your data.",
-    reward: "30 PRIV",
+    reward: "30 PRIVV",
     icon: Cpu,
     slides: [
       {
@@ -188,7 +188,7 @@ export const CURRICULUM: LessonData[] = [
     id: "dark-pools",
     title: "Dark Pool Liquidity",
     description: "Understand confidential trading via Anoncoin protocols.",
-    reward: "40 PRIV",
+    reward: "40 PRIVV",
     icon: Lock,
     slides: [
       {

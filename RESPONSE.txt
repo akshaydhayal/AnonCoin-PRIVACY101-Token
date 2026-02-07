@@ -1,18 +1,10 @@
 https://api.dubdub.tv/v1/posts
 
-
-files
-(binary)
-tickerName
-Privacy101 Coin 
-tickerSymbol
-PRIVV
-description
-Learn Privacy. Earn $PRIV. Own Your Data.
-chainType
-solana
-quoteSymbol
-SOL
+contract address: 63zi4yxtSCGsEKzpCQ2mo7PzzTE26E1t1LC3xs9rdoge
+tickerName :Privacy101 Coin 
+tickerSymbol :PRIVV
+description :Learn Privacy. Earn $PRIV. Own Your Data.
+chainType :solana
 
 
 

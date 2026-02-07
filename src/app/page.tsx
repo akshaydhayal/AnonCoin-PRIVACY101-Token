@@ -5,12 +5,12 @@ import { useWallet } from '@solana/wallet-adapter-react';
 import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
-  Shield, 
   Lock, 
   Zap, 
   CheckCircle2, 
   Gift, 
-  BookOpen
+  BookOpen,
+  ExternalLink
 } from 'lucide-react';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
@@ -31,8 +31,7 @@ function HomeContent() {
   const [completedTasks, setCompletedTasks] = useState<string[]>([]);
   const [isMinting, setIsMinting] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
-  const [hasOnChainAccount, setHasOnChainAccount] = useState<boolean | null>(null);
-  const [isInitializing, setIsInitializing] = useState(false);
+  const [allocatedBalance, setAllocatedBalance] = useState<number>(0);
 
   // Sync progress from On-Chain only
   useEffect(() => {
@@ -47,11 +46,11 @@ function HomeContent() {
         const account = await program.account.userProgress.fetch(pda);
         if (account) {
           setCompletedTasks(account.completedLessons as string[]);
-          setHasOnChainAccount(true);
+          setAllocatedBalance(account.allocatedBalance.toNumber());
         }
       } catch {
-        setHasOnChainAccount(false);
         setCompletedTasks([]);
+        setAllocatedBalance(0);
       }
     }
     fetchProgress();
@@ -59,45 +58,6 @@ function HomeContent() {
 
   const progress = (completedTasks.length / CURRICULUM.length) * 100;
   const allCompleted = completedTasks.length === CURRICULUM.length;
-
-  const handleInitialize = async () => {
-    if (!program || !publicKey) return;
-    setIsInitializing(true);
-    const toastId = toast.loading("Initializing your privacy profile on devnet...");
-    
-    try {
-      const pda = getUserProgressPDA(publicKey);
-      const signature = await program.methods
-        .initializeUser()
-        .accounts({
-          userProgress: pda,
-          user: publicKey,
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        } as any)
-        .rpc();
-      
-      setHasOnChainAccount(true);
-      toast.success(
-        <span>
-          Profile Initialized!{" "}
-          <a 
-            href={`https://explorer.solana.com/tx/${signature}?cluster=devnet`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-purple-400 underline ml-1"
-          >
-            View Tx
-          </a>
-        </span>,
-        { id: toastId, duration: 10000 }
-      );
-    } catch (error) {
-      console.error("Initialization error:", error);
-      toast.error("Failed to initialize on-chain progress. Ensure you have Devnet SOL.", { id: toastId });
-    } finally {
-      setIsInitializing(false);
-    }
-  };
 
   const handleClaim = async () => {
     if (!connected || !allCompleted || !publicKey) return;
@@ -112,7 +72,7 @@ function HomeContent() {
         body: JSON.stringify({
           walletAddress: publicKey.toBase58(),
           tickerName: "Privacy Legend",
-          tickerSymbol: "PL101",
+          tickerSymbol: "PRIVV",
           description: "Earned by completing PRIVACY101 curriculum"
         }),
       });
@@ -121,7 +81,7 @@ function HomeContent() {
 
       if (data.status === 'success') {
         setShowSuccess(true);
-        toast.success("Airdrop verification complete! Check your wallet for the $PRIV badge.");
+        toast.success("Airdrop verification complete! Check your wallet for the $PRIVV badge.");
       } else {
         toast.error(`Airdrop Error: ${data.message}`);
       }
@@ -151,7 +111,37 @@ function HomeContent() {
             PRIVACY101
           </span>
         </div>
-        <WalletMultiButton className="!bg-white/5 !border !border-white/10 hover:!bg-white/10 !transition-all !rounded-full !h-10 !px-6 !text-sm" />
+        <div className="flex flex-col items-end gap-1">
+          <WalletMultiButton className="!bg-white/5 !border !border-white/10 hover:!bg-white/10 !transition-all !rounded-full !h-10 !px-6 !text-sm" />
+          
+          {connected && (
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="flex items-center gap-3 px-4 py-2 bg-white/[0.02] border border-white/5 rounded-full backdrop-blur-sm group hover:border-white/10 transition-colors"
+            >
+              <div className="flex items-center gap-2">
+                <span className="text-[12px] font-mono text-gray-300 uppercase tracking-wider">Rewards</span>
+                <div className="flex items-baseline gap-1">
+                  <span className="text-base font-bold text-white tracking-tight">{allocatedBalance}</span>
+                  <span className="text-[12px] font-bold text-green-500/80">$PRIVV</span>
+                </div>
+              </div>
+              
+              <div className="w-px h-3 bg-white/10" />
+              
+              <Link 
+                href={`https://explorer.solana.com/address/63zi4yxtSCGsEKzpCQ2mo7PzzTE26E1t1LC3xs9rdoge?cluster=devnet`}
+                target="_blank"
+                className="flex items-center gap-1.5 peer"
+                title="View Treasury"
+              >
+                <span className="text-[11px] font-mono text-gray-300 group-hover:text-gray-400 transition-colors uppercase tracking-[0.2em]">63zi...ogoe</span>
+                <ExternalLink className="w-2.5 h-2.5 text-gray-600 group-hover:text-purple-400 transition-colors" />
+              </Link>
+            </motion.div>
+          )}
+        </div>
       </nav>
 
       <section className="relative z-10 max-w-5xl mx-auto px-6 py-0 text-center">
@@ -168,40 +158,10 @@ function HomeContent() {
             Privacy is <span className="text-green-400 italic">Normal</span>.
           </h1>
           <p className="text-lg text-gray-400 max-w-2xl mx-auto mb-6 leading-relaxed">
-            Privacy is a fundamental right. Complete the slide-based lessons below to learn the essentials of cypherpunk operations and earn <span className="text-white font-mono">$PRIV</span> rewards.
+            Privacy is a fundamental right. Complete the slide-based lessons below to learn the essentials of cypherpunk operations and earn <span className="text-white font-mono">$PRIVV</span> rewards.
           </p>
         </motion.div>
 
-        {/* On-Chain Status Banner */}
-        {connected && hasOnChainAccount === false && (
-          <motion.div 
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="mb-12 p-6 rounded-2xl border border-purple-500/30 bg-purple-500/5 backdrop-blur-sm flex flex-col md:flex-row items-center justify-between gap-4 text-left"
-          >
-            <div>
-              <h3 className="text-xl font-bold flex items-center gap-2">
-                <Shield className="w-5 h-5 text-purple-400" />
-                Go On-Chain
-              </h3>
-              <p className="text-gray-400 text-sm">
-                To start tracking your progress, you must initialize your <span className="text-white font-mono">UserProgress</span> PDA on Solana.
-              </p>
-            </div>
-            <button
-              onClick={handleInitialize}
-              disabled={isInitializing}
-              className="px-6 py-3 bg-purple-500 hover:bg-purple-600 text-white rounded-full font-bold transition-all flex items-center gap-2 disabled:opacity-50"
-            >
-              {isInitializing ? (
-                <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-              ) : (
-                <Zap className="w-4 h-4" />
-              )}
-              INITIALIZE ON-CHAIN
-            </button>
-          </motion.div>
-        )}
 
         {/* Progress Section */}
         <div className="mb-4">

@@ -2,13 +2,13 @@
 
 import { useMemo } from 'react';
 import { PublicKey } from '@solana/web3.js';
-import { AnchorProvider, Program, Idl } from '@coral-xyz/anchor';
+import { AnchorProvider, Program, Idl, BN } from '@coral-xyz/anchor';
 import { useAnchorWallet, useConnection } from '@solana/wallet-adapter-react';
 import idlData from '@/lib/idl.json';
 import { PrivacyProgram } from '@/lib/types/privacy_program';
 
 // Use the address from the IDL or a hardcoded one if preferred
-export const PROGRAM_ID = new PublicKey(idlData.address);
+export const PROGRAM_ID = new PublicKey("GHTszogQs3yHDPU4L5wQDRgcnddQh2nkizuuXAoFTpqG");
 
 export function usePrivacyProgram() {
   const { connection } = useConnection();
@@ -40,5 +40,6 @@ export function usePrivacyProgram() {
     getUserProgressPDA,
     wallet,
     publicKey: wallet?.publicKey,
+    BN,
   };
 }
