@@ -1,0 +1,131 @@
+https://api.dubdub.tv/v1/posts
+
+
+files
+(binary)
+tickerName
+Privacy101 Coin 
+tickerSymbol
+PRIVV
+description
+Learn Privacy. Earn $PRIV. Own Your Data.
+chainType
+solana
+quoteSymbol
+SOL
+
+
+
+{
+    "status": true,
+    "message": "Posted",
+    "data": {
+        "docs": [
+            {
+                "token": {
+                    "saleInfo": {
+                        "lastSuccessfulSale": {}
+                    },
+                    "isMigrated": false,
+                    "tokenId": "6986fe91e333cc116987389f",
+                    "name": "Privacy101 Coin ",
+                    "symbol": "PRIVV",
+                    "uri": "https://cdn-aibackrooms.s3.us-west-1.amazonaws.com/PRIVV/token-metadata.json",
+                    "address": "63zi4yxtSCGsEKzpCQ2mo7PzzTE26E1t1LC3xs9rdoge",
+                    "txHash": "2mracDHiC2fhCP3bFdYbwGVumPPeND9tVR6LZVDuj9ryUUgeUbWzi8Ki5nn2QdBEXDUSpF8KJRwEVo1UW1yxVJna",
+                    "royalty": {
+                        "claimStatus": 4,
+                        "lifetimeEarnings": 0,
+                        "preConsentLastCycleIndex": -1
+                    }
+                },
+                "status": {
+                    "event": {},
+                    "message": null,
+                    "code": 1,
+                    "updatedAt": "2026-02-07T08:57:55.797Z"
+                },
+                "metaData": {
+                    "royaltyShares": {
+                        "royaltyUser": {
+                            "profileURL": null,
+                            "userName": null,
+                            "id": null,
+                            "name": null,
+                            "profileImage": null
+                        },
+                        "addedOn": null
+                    },
+                    "buyParams": {
+                        "quoteId": null
+                    },
+                    "twitterLink": "",
+                    "telegramLink": "",
+                    "websiteLink": null,
+                    "tagUserProfiles": [],
+                    "affiliations": []
+                },
+                "remix": {
+                    "childCount": 0
+                },
+                "anonPost": {
+                    "childCount": 0,
+                    "pinnedCount": 0
+                },
+                "deletedOn": {},
+                "_id": "6986fe91e333cc1169873890",
+                "userId": {
+                    "state": {
+                        "currentTier": 6,
+                        "followerBracket": 1
+                    },
+                    "twitter": {
+                        "followersFormatted": "0-1k"
+                    },
+                    "_id": "69860820f2677ee32992766e",
+                    "name": "Bigfoot Sword",
+                    "userName": "BigfootSword",
+                    "profileImageUrl": "https://cdn.anoncoin.it/69860820f2677ee32992766e/dubdub-profile-image.jpg"
+                },
+                "isExternal": false,
+                "title": "Privacy101 Coin ",
+                "tickerName": "Privacy101 Coin ",
+                "tickerSymbol": "PRIVV",
+                "media": [
+                    {
+                        "thumbnailUrl": "https://cdn.anoncoin.it/PRIVV/image.png",
+                        "description": "Learn Privacy. Earn $PRIV. Own Your Data.",
+                        "tagline": "",
+                        "_id": "6986fe91e333cc1169873891",
+                        "references": []
+                    }
+                ],
+                "supportedMedia": [
+                    {
+                        "references": [
+                            {
+                                "type": "image",
+                                "url": "https://cdn.anoncoin.it/69860820f2677ee32992766e/uploads/1770454671838-user-uploaded.png",
+                                "_id": "6986fe91e333cc1169873893"
+                            }
+                        ],
+                        "_id": "6986fe91e333cc1169873892"
+                    }
+                ],
+                "totalLikes": 0,
+                "totalComments": 0,
+                "totalReports": 0,
+                "totalDownloads": 0,
+                "name": "Bigfoot Sword",
+                "userName": "BigfootSword",
+                "isVerifiedUser": true,
+                "profileImageUrl": "https://cdn.anoncoin.it/69860820f2677ee32992766e/dubdub-profile-image.jpg",
+                "toastDismissed": false,
+                "topics": [],
+                "addedOn": "2026-02-07T08:57:53.521Z",
+                "modifiedOn": "2026-02-07T08:57:55.798Z"
+            }
+        ]
+    },
+    "requestId": "158e8230-0403-11f1-88ed-59a93a95b474"
+}

@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronLeft, ChevronRight, CheckCircle2, AlertCircle, HelpCircle, ArrowRight, Trophy } from 'lucide-react';
+import { ChevronLeft, ChevronRight, AlertCircle, Trophy } from 'lucide-react';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 import { LessonData, Question } from '@/lib/curriculum';

@@ -46,9 +46,13 @@ export class AnoncoinAPI {
       });
 
       return response.data;
-    } catch (error: any) {
-      console.error('Anoncoin API Error:', error.response?.data || error.message);
-      throw error.response?.data || error;
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        console.error('Anoncoin API Error:', error.response?.data || error.message);
+        throw error.response?.data || error;
+      }
+      console.error('Anoncoin API Error:', error);
+      throw error;
     }
   }
 }

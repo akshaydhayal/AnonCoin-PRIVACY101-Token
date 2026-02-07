@@ -29,11 +29,12 @@ export async function POST(req: NextRequest) {
       message: 'Airdrop transaction generated!',
       data: result
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('API Route Error:', error);
+    const message = error instanceof Error ? error.message : 'Failed to trigger airdrop';
     return NextResponse.json({
       status: 'failed',
-      message: error.message || 'Failed to trigger airdrop'
+      message: message
     }, { status: 500 });
   }
 }

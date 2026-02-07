@@ -9,7 +9,6 @@ import {
   Lock, 
   Zap, 
   CheckCircle2, 
-  ExternalLink, 
   Gift, 
   BookOpen
 } from 'lucide-react';
@@ -50,13 +49,13 @@ function HomeContent() {
           setCompletedTasks(account.completedLessons as string[]);
           setHasOnChainAccount(true);
         }
-      } catch (e) {
+      } catch {
         setHasOnChainAccount(false);
         setCompletedTasks([]);
       }
     }
     fetchProgress();
-  }, [publicKey, program, connected, searchParams]);
+  }, [publicKey, program, connected, searchParams, getUserProgressPDA]);
 
   const progress = (completedTasks.length / CURRICULUM.length) * 100;
   const allCompleted = completedTasks.length === CURRICULUM.length;
@@ -73,28 +72,27 @@ function HomeContent() {
         .accounts({
           userProgress: pda,
           user: publicKey,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } as any)
         .rpc();
       
       setHasOnChainAccount(true);
       toast.success(
-        (t) => (
-          <span>
-            Profile Initialized!{" "}
-            <a 
-              href={`https://explorer.solana.com/tx/${signature}?cluster=devnet`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-purple-400 underline ml-1"
-            >
-              View Tx
-            </a>
-          </span>
-        ),
+        <span>
+          Profile Initialized!{" "}
+          <a 
+            href={`https://explorer.solana.com/tx/${signature}?cluster=devnet`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-purple-400 underline ml-1"
+          >
+            View Tx
+          </a>
+        </span>,
         { id: toastId, duration: 10000 }
       );
-    } catch (e) {
-      console.error("Initialization error:", e);
+    } catch (error) {
+      console.error("Initialization error:", error);
       toast.error("Failed to initialize on-chain progress. Ensure you have Devnet SOL.", { id: toastId });
     } finally {
       setIsInitializing(false);

@@ -1,36 +1,74 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🔐 PRIVACY101
 
-## Getting Started
+**Learn Privacy. Earn $PRIV. Own Your Data.**
 
-First, run the development server:
+PRIVACY101 is a decentralized educational platform built on **Solana**. It teaches the fundamental principles of cypherpunk operations and blockchain privacy through an interactive, slide-based curriculum.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+![Homepage Screenshot](public/screenshots/homepage.png)
+![Lesson Page Screenshot](public/screenshots/lesson_page.png)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🚀 Features
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **On-Chain Progress**: Your learning journey is permanently recorded on the Solana Devnet using Program Derived Addresses (PDAs).
+- **Interactive Slides**: Concise, data-rich slides covering Burner Strategies, IP Shielding, RPC Privacy, and Dark Pools.
+- **Knowledge Verification**: Each lesson ends with a quiz to ensure you've mastered the concepts before claiming rewards.
+- **$PRIV Rewards**: Complete lessons to receive $PRIV badge tokens directly to your wallet.
+- **Transcent Aesthetics**: A premium, dark-mode cypherpunk UI designed to inspire digital sovereignty.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🛠 Tech Stack
 
-## Learn More
+- **Frontend**: Next.js 15, React, Tailwind CSS, Framer Motion
+- **Blockchain**: Solana (Devnet), Anchor Framework
+- **Notifications**: React Hot Toast with direct Solana Explorer links
+- **Wallet**: Solana Wallet Adapter integration
 
-To learn more about Next.js, take a look at the following resources:
+## 📂 Project Structure
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- `src/app`: Next.js App Router and Page components.
+- `src/components`: Reusable UI components including the `SlideDeck`.
+- `src/hooks`: Custom hooks for Solana program interaction (`usePrivacyProgram`).
+- `src/lib`: Core logic and curriculum data.
+- `privacy_program`: Anchor source code for the on-chain progress tracking.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 🏁 Getting Started
 
-## Deploy on Vercel
+### Prerequisites
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- Node.js & npm
+- Solana CLI
+- Anchor CLI
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Installation
+
+1. Clone the repository:
+   ```bash
+   git clone <repository-url>
+   cd anoncoin-privacy101
+   ```
+
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+
+3. Set up environment variables:
+   Create a `.env.local` file with:
+   ```env
+   NEXT_PUBLIC_RPC_URL=https://api.devnet.solana.com
+   ```
+
+4. Run the development server:
+   ```bash
+   npm run dev
+   ```
+
+## 📜 Curriculum
+
+1. **Burner Strategy**: Digital isolation using temporary wallets.
+2. **Shielded IPs**: Preventing physical location leaks.
+3. **RPC Privacy**: Taking control of your data gateway.
+4. **Dark Pools**: Confidential trading and MEV protection.
+
+---
+
+Built for the **Solana Privacy Hackathon** • Powered by **Anoncoin**

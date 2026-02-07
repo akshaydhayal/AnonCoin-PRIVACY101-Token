@@ -1,5 +1,4 @@
-import React from 'react';
-import { Ghost, Shield, Cpu, Lock, Wallet, Globe, Eye, Zap, Fingerprint, Network } from 'lucide-react';
+import { Shield, Cpu, Lock, Zap } from 'lucide-react';
 
 export interface SlideContent {
   title: string;
@@ -20,7 +19,7 @@ export interface LessonData {
   title: string;
   description: string;
   reward: string;
-  icon: any;
+  icon: React.ElementType;
   slides: SlideContent[];
   quiz: Question[];
 }
@@ -31,7 +30,7 @@ export const CURRICULUM: LessonData[] = [
     title: "Burner Strategy",
     description: "Learn to separate your digital identities using temporary wallets.",
     reward: "10 PRIV",
-    icon: Ghost,
+    icon: Shield,
     slides: [
       {
         title: "The Illusion of Anonymity",

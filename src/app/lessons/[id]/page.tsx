@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { CURRICULUM } from '@/lib/curriculum';
 import { SlideDeck } from '@/components/SlideDeck';
@@ -11,25 +11,26 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { usePrivacyProgram } from '@/hooks/usePrivacyProgram';
 
 import toast from 'react-hot-toast';
+import { LessonData } from '@/lib/curriculum';
 
 export default function LessonPage() {
     const params = useParams();
     const router = useRouter();
-    const [lesson, setLesson] = useState<any>(null);
     const { program, getUserProgressPDA, publicKey } = usePrivacyProgram();
     const [isSaving, setIsSaving] = useState(false);
 
+    const lesson = useMemo(() => {
+        return CURRICULUM.find(l => l.id === params.id) || null;
+    }, [params.id]) as LessonData | null;
+
     useEffect(() => {
-        const found = CURRICULUM.find(l => l.id === params.id);
-        if (!found) {
+        if (!lesson) {
             router.push('/');
-        } else {
-            setLesson(found);
         }
-    }, [params.id, router]);
+    }, [lesson, router]);
 
     const handleComplete = async () => {
-        if (!program || !publicKey) {
+        if (!program || !publicKey || !lesson) {
             toast.error("Please connect your wallet to save progress.");
             return;
         }
@@ -50,32 +51,31 @@ export default function LessonPage() {
                     .accounts({
                         userProgress: pda,
                         user: publicKey,
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
                     } as any)
                     .rpc();
 
                 toast.success(
-                    (t) => (
-                      <span>
-                        Lesson Verified!{" "}
-                        <a 
-                          href={`https://explorer.solana.com/tx/${signature}?cluster=devnet`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-purple-400 underline ml-1"
-                        >
-                          View Tx
-                        </a>
-                      </span>
-                    ),
-                    { id: toastId, duration: 10000 }
+                  <span>
+                    Lesson Verified!{" "}
+                    <a 
+                      href={`https://explorer.solana.com/tx/${signature}?cluster=devnet`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-purple-400 underline ml-1"
+                    >
+                      View Tx
+                    </a>
+                  </span>,
+                  { id: toastId, duration: 10000 }
                 );
-            } catch (e) {
+            } catch {
                 toast.error("On-chain account not found. Please initialize on the home page.", { id: toastId });
                 setIsSaving(false);
                 return;
             }
-        } catch (e) {
-            console.error("On-chain error:", e);
+        } catch (error) {
+            console.error("On-chain error:", error);
             toast.error("Failed to save progress. Ensure you have Devnet SOL.", { id: toastId });
             setIsSaving(false);
             return;
