@@ -11,40 +11,43 @@ function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-// Components for Infographics
-const BurnerConcept = () => (
-    <div className="flex flex-col items-center justify-center p-8 bg-purple-500/5 border border-purple-500/10 rounded-3xl">
-        <div className="flex gap-8 items-center mb-8">
-            <div className="p-4 bg-white/5 rounded-2xl border border-white/10 text-gray-500 opacity-50">
-                <div className="text-[10px] font-mono mb-2 uppercase">Main Wallet</div>
-                <div className="w-16 h-1 bg-gray-500 rounded" />
-            </div>
-            <div className="h-[2px] w-12 border-t-2 border-dashed border-red-500/30 relative">
-                <XIcon className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-4 h-4 text-red-500" />
-            </div>
-            <div className="p-4 bg-purple-500/10 rounded-2xl border border-purple-500/30 text-purple-400 shadow-lg shadow-purple-500/20">
-                <div className="text-[10px] font-mono mb-2 uppercase">Burner Wallet</div>
-                <div className="w-16 h-1 bg-purple-400 rounded" />
-            </div>
-        </div>
-        <p className="text-xs text-purple-400 font-mono text-center uppercase tracking-widest">Digital Isolation Layer</p>
-    </div>
-);
+import Image from 'next/image';
 
-const XIcon = ({ className }: { className?: string }) => (
-    <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-    </svg>
-);
-
-const InfographicPlaceholder = ({ type }: { type: string }) => {
-    if (type === 'burner-concept') return <BurnerConcept />;
-    
+const InfographicRenderer = ({ type }: { type: string }) => {
     return (
-        <div className="w-full aspect-video bg-white/5 border border-white/10 rounded-3xl flex flex-col items-center justify-center gap-4">
-            <div className="w-16 h-16 rounded-full bg-gradient-to-br from-purple-500 to-green-500 opacity-20 animate-pulse" />
-            <span className="text-gray-500 font-mono text-xs uppercase tracking-[0.2em]">{type}</span>
-        </div>
+        <motion.div 
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="w-full aspect-square relative rounded-3xl overflow-hidden border border-white/10 bg-white/[0.02] shadow-2xl shadow-purple-500/5 group"
+        >
+            <Image
+                src={`/infographics/${type}.png`}
+                alt={`${type} infographic`}
+                fill
+                className="object-contain p-4 group-hover:scale-105 transition-transform duration-700"
+                priority
+            />
+            {/* Subtle overlay glow */}
+            <div className="absolute inset-0 bg-gradient-to-t from-purple-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
+        </motion.div>
+    );
+};
+
+const ImageRenderer = ({ src }: { src: string }) => {
+    return (
+        <motion.div 
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="w-full aspect-square relative rounded-3xl overflow-hidden border border-white/10 bg-white/[0.02] shadow-2xl shadow-purple-500/5 group"
+        >
+            <Image
+                src={`/images/${src}.jpeg`}
+                alt={`${src}`}
+                fill
+                className="object-cover group-hover:scale-105 transition-transform duration-1000"
+                priority
+            />
+        </motion.div>
     );
 };
 
@@ -229,7 +232,9 @@ export const SlideDeck: React.FC<{
                         </div>
                         <div className="hidden md:block">
                             {s.type === 'infographic' && s.infographic ? (
-                                <InfographicPlaceholder type={s.infographic} />
+                                <InfographicRenderer type={s.infographic} />
+                            ) : s.type === 'image' && s.image ? (
+                                <ImageRenderer src={s.image} />
                             ) : (
                                 <div className="p-6 bg-white/[0.02] border border-white/10 rounded-2xl backdrop-blur-sm aspect-video flex items-center justify-center">
                                     <lesson.icon className="w-16 h-16 text-purple-500/20" />

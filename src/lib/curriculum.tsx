@@ -3,7 +3,8 @@ import { Shield, Cpu, Lock, Zap } from 'lucide-react';
 export interface SlideContent {
   title: string;
   content: string | React.ReactNode;
-  infographic?: string; // This will be used to render an SVG or a custom component
+  infographic?: string;
+  image?: string;
   type: 'content' | 'infographic' | 'image';
 }
 
@@ -34,58 +35,107 @@ export const CURRICULUM: LessonData[] = [
     slides: [
       {
         title: "The Illusion of Anonymity",
-        type: "content",
-        content: "Most users mistakenly believe that blockchains like Bitcoin and Solana are anonymous by design. In reality, they are pseudonymous. While your real-world name isn't directly attached to your transactions, every move you've ever made is permanently recorded and linked to your public address. This creates a transparent, immutable web of your entire financial life that anyone with an explorer can analyze."
+        type: "image",
+        content: (
+          <div className="space-y-4">
+            <p>Most users believe blockchains are anonymous. In reality, they are <strong>pseudonymous</strong>. Every transaction is a permanent, public link in an immutable chain. If your identity is ever linked to your address (e.g., via a KYC exchange), your entire financial history becomes an open book.</p>
+            <div className="p-3 bg-white/5 border-l-2 border-purple-500 rounded-r-lg">
+              <p className="text-sm italic">&ldquo;On-chain data is the ultimate surveillance tool&mdash;it never forgets and it never sleeps.&rdquo;</p>
+            </div>
+            <p className="text-sm text-gray-400">Researchers use &lsquo;Clustering&rsquo; attacks to group all your addresses together based on how you move funds between them. One mistake is all it takes.</p>
+          </div>
+        ),
+        image: "bitcoin-anonymity"
       },
       {
-        title: "What is a Burner Wallet?",
+        title: "The Digital Airlock",
         type: "infographic",
-        content: "A burner wallet is a temporary, disposable wallet generated for a single high-risk interaction or a limited window of time. Think of it as a 'digital airlock'—it sits between your main assets and the experimental wilderness of DeFi, ensuring that even if the burner is compromised, your core holdings remain untouched and unlinked.",
+        content: (
+          <div className="space-y-4">
+            <p>A <strong>Burner Wallet</strong> is a temporary, single-use identity designed to be discarded like a &lsquo;burner phone&rsquo;. It acts as a digital airlock between your secure main assets and the experimental wilderness of DeFi.</p>
+            <ul className="space-y-2 text-sm text-gray-400">
+              <li className="flex gap-2"><Zap className="w-4 h-4 text-purple-500 shrink-0" /> <strong>Risk Isolation:</strong> If a dApp is malicious, only the burner is drained.</li>
+              <li className="flex gap-2"><Zap className="w-4 h-4 text-purple-500 shrink-0" /> <strong>Unlinkability:</strong> It breaks the trail of your high-value holdings.</li>
+              <li className="flex gap-2"><Zap className="w-4 h-4 text-purple-500 shrink-0" /> <strong>Micro-Funding:</strong> Only transfer the exact SOL needed for the interaction.</li>
+            </ul>
+          </div>
+        ),
         infographic: "burner-concept"
       },
       {
-        title: "When to Use a Burner",
+        title: "Strategic Execution",
         type: "content",
         content: (
-          <ul className="space-y-4">
-            <li className="flex gap-3"><Zap className="text-yellow-400 shrink-0" /> Interacting with experimental DeFi protocols.</li>
-            <li className="flex gap-3"><Zap className="text-yellow-400 shrink-0" /> Minting high-risk NFTs from unknown creators.</li>
-            <li className="flex gap-3"><Zap className="text-yellow-400 shrink-0" /> Testing new dApps before committing your main funds.</li>
-          </ul>
+          <div className="space-y-4">
+            <p>Successful burner strategy requires a <strong>Layered Wallet System</strong>. You shouldn&rsquo;t just have one &lsquo;hot&rsquo; wallet; you need a hierarchy of safety.</p>
+            <div className="grid grid-cols-1 gap-3">
+              <div className="px-4 py-3 bg-green-500/10 border border-green-500/20 rounded-xl">
+                <p className="font-bold text-green-400">1. The Vault (Offline)</p>
+                <p className="text-xs text-gray-400">Hardware wallet, never connects to dApps. Holds 90% of assets.</p>
+              </div>
+              <div className="px-4 py-3 bg-blue-500/10 border border-blue-500/20 rounded-xl">
+                <p className="font-bold text-blue-400">2. The Operating Hub (Hot)</p>
+                <p className="text-xs text-gray-400">Daily management. Funds burners, collects rewards. Moderate balance.</p>
+              </div>
+              <div className="px-4 py-3 bg-purple-500/10 border border-purple-500/20 rounded-xl">
+                <p className="font-bold text-purple-400">3. The Burner (Disposable)</p>
+                <p className="text-xs text-gray-400">Ephemeral instance for a single NFT mint or risky swap. Drained immediately.</p>
+              </div>
+            </div>
+          </div>
         )
       },
       {
         title: "The Golden Rule",
-        type: "content",
-        content: "Never, ever link your burner wallet to your 'main' wallet via a direct on-chain transfer. Doing so creates a permanent link that investigators or bots can follow effortlessly."
+        type: "image",
+        content: (
+          <div className="space-y-4">
+            <p className="text-red-400 font-bold uppercase tracking-tighter">Never link your identities!</p>
+            <p>The biggest mistake is transferring funds directly from your <strong>Vault</strong> to a <strong>Burner</strong>. This creates an on-chain parent-child relationship that is trivial to track.</p>
+            <div className="p-4 bg-white/5 border border-white/10 rounded-2xl">
+              <p className="text-xs font-mono text-purple-400">Pro Tip:</p>
+              <p className="text-sm">Use a centralized exchange or a privacy pool as an intermediary. By sending funds to an exchange and then withdrawing into a fresh burner, you break the direct on-chain link.</p>
+            </div>
+          </div>
+        ),
+        image: "bitcoin-anonymity"
       },
       {
-        title: "Isolation is Key",
+        title: "Identity Isolation",
         type: "infographic",
-        content: "Use different browser profiles or even different browsers for each wallet identity to prevent cross-site tracking and cookie leakage.",
+        content: (
+          <div className="space-y-4">
+            <p>Privacy isn&rsquo;t just about addresses; it&rsquo;s about <strong>Metatada</strong>. When you use your main browser for your burner wallet, you leak cookies, local storage, and fingerprints.</p>
+            <ul className="space-y-2 text-sm text-gray-400">
+              <li className="flex gap-2">🛡️ Use different <strong>Browser Profiles</strong> for different identities.</li>
+              <li className="flex gap-2">🛡️ Brave/Firefox support sandboxed profiles to prevent &lsquo;Cross-Site Tracking&rsquo;.</li>
+              <li className="flex gap-2">🛡️ Digital fingerprinting (screen res, fonts) can link you even without cookies.</li>
+            </ul>
+          </div>
+        ),
         infographic: "isolation-diagram"
       }
     ],
     quiz: [
       {
-        question: "Why are Solana transactions considered pseudonymous rather than anonymous?",
+        question: "What is the primary purpose of a Hierarchical layered wallet strategy?",
         options: [
-          "Transactions are private by default.",
-          "Every transaction is fixed to a public address that can be tracked.",
-          "Nobody can see the transactions."
+          "To make transactions faster.",
+          "To isolate risk and prevent linking your main wealth to risky dApp interactions.",
+          "To avoid paying transaction fees."
         ],
         correctAnswer: 1,
-        explanation: "Solana is a public ledger. While your name isn't attached, your public key (pseudonym) is."
+        explanation: "By isolating activities into different layers, a compromise in a high-risk layer (burner) doesn't expose your secure layer (vault)."
       },
       {
-        question: "Should you transfer funds directly from your main wallet to your burner wallet?",
+        question: "Why should you avoid direct transfers between your Vault and your Burner?",
         options: [
-          "Yes, it's the fastest way.",
-          "No, it creates a traceable link on-chain.",
-          "Only if the amount is small."
+          "It's too expensive.",
+          "It creates a permanent, traceable link on the public ledger.",
+          "Solana doesn't allow it."
         ],
         correctAnswer: 1,
-        explanation: "A direct transfer creates a link that makes the 'burner' easy to trace back to your main stash."
+        explanation: "Direct transfers are 'hard links' that surveillance companies use to map your entire wallet ecosystem."
       }
     ]
   },
@@ -99,41 +149,83 @@ export const CURRICULUM: LessonData[] = [
       {
         title: "The Silent Leak",
         type: "content",
-        content: "Every time your wallet app fetches your balance, updates a price, or sends a transaction, it communicates with a remote server. By default, that server sees your unique IP address—the digital equivalent of your physical home address. Without protection, your every financial inquiry is stamped with your location, allowing observers to map your virtual wealth to your physical identity."
+        content: (
+          <div className="space-y-4">
+            <p>Every time your wallet fetches a balance or sends a transaction, it connects to a server. That server sees your <strong>IP Address</strong>&mdash;the unique signature of your physical location and Internet Provider.</p>
+            <div className="p-3 bg-orange-500/10 border-l-2 border-orange-500 rounded-r-lg">
+              <p className="text-xs font-bold text-orange-400 uppercase">Warning:</p>
+              <p className="text-sm text-gray-400 italic">&ldquo;Your digital wealth shouldn&rsquo;t be stamped with your home address.&rdquo;</p>
+            </div>
+            <p className="text-sm">Surveillance firms use these logs to map &lsquo;Rich Wallets&rsquo; to real-world houses, creating a significant physical security risk.</p>
+          </div>
+        ),
       },
       {
-        title: "IP to Identity",
+        title: "Digital Fingerprinting",
         type: "infographic",
-        content: "RPC providers and dApp backends can link your IP to your Wallet Address. Over time, they can geolocate you with startling accuracy.",
+        content: (
+          <div className="space-y-4">
+            <p>Even if you hide your IP, websites use <strong>Browser Fingerprinting</strong> to track you. They collect invisible data points to build a unique profile of your device.</p>
+            <div className="grid grid-cols-2 gap-2 text-[10px] font-mono text-gray-500">
+              <div className="p-2 border border-white/5 rounded">Screen Resolution</div>
+              <div className="p-2 border border-white/5 rounded">Installed Fonts</div>
+              <div className="p-2 border border-white/5 rounded">Browser Version</div>
+              <div className="p-2 border border-white/5 rounded">GPU Rendering (Canvas)</div>
+            </div>
+            <p className="text-sm text-gray-400">Fingerprinting is often more accurate than cookies because users rarely think to disable the &lsquo;harmless&rsquo; hardware attributes of their browser.</p>
+          </div>
+        ),
         infographic: "mapping-ip"
       },
       {
-        title: "Enter the VPN",
+        title: "Building the Shield",
         type: "content",
-        content: "A Virtual Private Network (VPN) creates an encrypted tunnel for your data. It hides your real IP and makes it appear as if you are connecting from a different location."
-      },
-      {
-        title: "Browser Fingerprinting",
-        type: "content",
-        content: "Anonymity isn't just about IP. Websites can see your screen resolution, installed fonts, and browser version to create a unique 'fingerprint' of your device."
+        content: (
+          <div className="space-y-4">
+            <p>To disappear, you need a <strong>VPN (Virtual Private Network)</strong>. It encrypts your traffic and routes it through a remote server, masking your true IP from dApps and observers.</p>
+            <div className="p-4 bg-blue-500/5 border border-blue-500/20 rounded-2xl">
+              <p className="text-xs font-mono text-blue-400">Pro Tip:</p>
+              <p className="text-sm">A VPN is the foundation, but <strong>Tor (The Onion Router)</strong> is the fortress. Tor routes your data through 3 different global relays, making it near-impossible for even the ISP to know what you&rsquo;re doing.</p>
+            </div>
+          </div>
+        ),
       },
       {
         title: "The Privacy Stack",
         type: "infographic",
-        content: "Combine a VPN with a privacy-focused browser (like Brave or LibreWolf) to maximize your shield.",
+        content: (
+          <div className="space-y-4">
+            <p>True privacy requires a multi-layered <strong>Privacy Stack</strong>. One tool is never enough; you must stack your defenses.</p>
+            <ul className="space-y-3">
+              <li className="flex gap-2 text-sm"><Lock className="w-4 h-4 text-green-500 shrink-0" /> <strong>Hardened Browser:</strong> Brave or Firefox with strict tracking protection.</li>
+              <li className="flex gap-2 text-sm"><Lock className="w-4 h-4 text-green-500 shrink-0" /> <strong>Encrypted Tunnel:</strong> A high-quality VPN with a &lsquo;No-Logs&rsquo; policy.</li>
+              <li className="flex gap-2 text-sm"><Lock className="w-4 h-4 text-green-500 shrink-0" /> <strong>Identity Separation:</strong> Never log into social accounts (Google/X) in your &lsquo;Sovereign&rsquo; browser.</li>
+            </ul>
+          </div>
+        ),
         infographic: "privacy-stack"
       }
     ],
     quiz: [
       {
-        question: "Who can see your IP address when you use a dApp without a VPN?",
+        question: "What is 'Browser Fingerprinting'?",
         options: [
-          "Only your ISP.",
-          "The RPC provider and the dApp backend.",
-          "Nobody."
+          "Using your finger to unlock your phone.",
+          "Collecting minor software/hardware attributes to create a unique identifier.",
+          "Printing out your transaction history."
         ],
         correctAnswer: 1,
-        explanation: "Any server you connect to (RPC, API, Websocket) can see your public IP."
+        explanation: "Fingerprinting uses 'harmless' data like your fonts and screen size to track you across the web without cookies."
+      },
+      {
+        question: "Why is a VPN considered a 'foundation' for crypto privacy?",
+        options: [
+          "It makes your transactions free.",
+          "It masks your physical location (IP address) from RPC providers and dApps.",
+          "It automatically generates private keys."
+        ],
+        correctAnswer: 1,
+        explanation: "Without a VPN, every click and balance check leaks your physical location to the server operator."
       }
     ]
   },
@@ -145,42 +237,67 @@ export const CURRICULUM: LessonData[] = [
     icon: Cpu,
     slides: [
       {
-        title: "What is an RPC?",
+        title: "The Blockchain Gateway",
         type: "content",
-        content: "Remote Procedure Call (RPC) nodes are the essential traffic controllers of the blockchain world. When your wallet displays 'Sending...', it isn't talking directly to the entire network; it's pushing your transaction data to an RPC node, which then validates and broadcasts it. Whoever controls that node controls the lens through which you see the blockchain—and the lens through which the blockchain sees you."
+        content: (
+          <div className="space-y-4">
+            <p><strong>Remote Procedure Call (RPC)</strong> nodes are the traffic controllers. Your wallet doesn&rsquo;t talk to the entire blockchain; it talks to <em>one</em> node that relays your messages. Whoever owns that node is the &lsquo;all-seeing eye&rsquo; of your crypto life.</p>
+            <div className="p-4 bg-purple-500/5 border border-purple-500/10 rounded-2xl">
+              <p className="text-xs font-mono text-purple-400">Did You Know?</p>
+              <p className="text-sm">When you use a default wallet RPC, the provider logs not just that you sent a transaction, but even when you just <em>look</em> at your balance or prices.</p>
+            </div>
+          </div>
+        ),
       },
       {
-        title: "The Problem with Public RPCs",
+        title: "Public Surveillance",
         type: "infographic",
-        content: "Default wallet RPCs (like Mainnet-beta) are often high-volume and monitored. They log every request made by every user.",
+        content: (
+          <div className="space-y-4">
+            <p>Public RPC nodes (like Solana&rsquo;s Mainnet-beta) are heavily monitored gateways. They act as <strong>centralized chokepoints</strong> in an otherwise decentralized network.</p>
+            <ul className="space-y-2 text-sm text-gray-400">
+              <li className="flex gap-2">⚠️ <strong>Logging:</strong> Storing IP, wallet address, and request frequency.</li>
+              <li className="flex gap-2">⚠️ <strong>Front-running:</strong> Malicious RPCs can &lsquo;peek&rsquo; at your trades and front-run them.</li>
+              <li className="flex gap-2">⚠️ <strong>Censorship:</strong> An RPC can selectively refuse to broadcast your transaction.</li>
+            </ul>
+          </div>
+        ),
         infographic: "rpc-logging"
       },
       {
-        title: "Custom RPCs",
+        title: "Sovereign Connections",
         type: "content",
-        content: "Switching to a private or custom RPC provider allows you to bypass the public 'log-heavy' gateways. Some providers offer specific privacy features like IP scrubbing."
+        content: (
+          <div className="space-y-4">
+            <p>To take back control, you should switch to <strong>Custom RPCs</strong>. Many premium providers offer specialized endpoints with &lsquo;IP Scrubbing&rsquo; and &lsquo;Zero-Log&rsquo; policies.</p>
+            <div className="p-4 bg-green-500/5 border border-green-500/20 rounded-2xl">
+              <p className="text-xs font-mono text-green-400">The Ultimate Goal:</p>
+              <p className="text-sm italic">&ldquo;The only way to be 100% sure your data isn&rsquo;t being logged is to <strong>host your own node</strong>. You become your own gateway, answering to nobody but the protocol.&rdquo;</p>
+            </div>
+          </div>
+        ),
       },
       {
-        title: "Self-Hosting",
+        title: "Speed vs. Stealth",
         type: "content",
-        content: "The ultimate privacy move is running your own Solana RPC node. You become your own gateway, meaning zero third-party logging of your transaction requests."
-      },
-      {
-        title: "Speed vs. Privacy",
-        type: "content",
-        content: "Private RPCs are often faster because they have less traffic. You get both better performance and better confidentiality."
+        content: (
+          <div className="space-y-4">
+            <p>Interestingly, private RPCs are often <strong>faster</strong> than public ones. Because they have fewer users and better infrastructure, your transactions hit the network milliseconds earlier.</p>
+            <p className="text-gray-400 text-sm">On Solana, those milliseconds can be the difference between a successful trade and a failed transaction during high volatility.</p>
+          </div>
+        )
       }
     ],
     quiz: [
       {
-        question: "What is the primary function of an RPC node for a wallet user?",
+        question: "Why is a custom RPC better for privacy?",
         options: [
-          "To store private keys.",
-          "To act as a bridge between the wallet and the blockchain network.",
-          "To generate airdrop tokens."
+          "It makes transactions cheaper.",
+          "It can offer 'IP scrubbing' and avoid the centralized logging of public gateways.",
+          "It automatically encrypts your private keys."
         ],
         correctAnswer: 1,
-        explanation: "RPCs are the 'translators' and 'messengers' that connect your wallet to the actual Solana ledger."
+        explanation: "Custom RPCs allow you to choose who you trust with your connection data, often opting for 'No-Logs' providers."
       }
     ]
   },
@@ -194,40 +311,75 @@ export const CURRICULUM: LessonData[] = [
       {
         title: "The Glass House",
         type: "content",
-        content: "On a standard decentralized exchange (DEX), every limit order and swap intent is broadcast to a public 'mempool' or order book. This transparency is a double-edged sword: specialized MEV bots monitor these public signals in real-time, effectively 'front-running' your trades by jumping ahead of you in the block, forcing you to execute at a worse price while they pocket the difference."
+        content: (
+          <div className="space-y-4">
+            <p>On a standard DEX, your trades are broadcast to a public <strong>Mempool</strong>. Specialized <strong>MEV (Maximal Extractable Value)</strong> bots watch this mempool 24/7 like predators.</p>
+            <div className="p-4 bg-red-500/5 border border-red-500/20 rounded-2xl">
+              <p className="text-xs font-mono text-red-400 italic">&ldquo;The bot sees you before you see the block.&rdquo;</p>
+              <p className="text-sm mt-1">If you swap $10k, a bot will jump ahead of your trade (front-run) and force you to buy higher, stealing your slippage as profit.</p>
+            </div>
+          </div>
+        ),
       },
       {
-        title: "What is a Dark Pool?",
+        title: "The Dark Pool concept",
         type: "infographic",
-        content: "A Dark Pool is a private exchange where orders are hidden from the public book. Only the final settlement is visible once the trade is finished.",
+        content: (
+          <div className="space-y-4">
+            <p>A <strong>Dark Pool</strong> is a private trading venue where orders are hidden from the public eye. Trades are matched internally, and only the final result is settled on-chain.</p>
+            <ul className="space-y-2 text-sm text-gray-400">
+              <li className="flex gap-2">🕶️ <strong>Invisible Intent:</strong> No public mempool, no bot front-running.</li>
+              <li className="flex gap-2">🕶️ <strong>ZK-Verification:</strong> Prove you have the funds without revealing your balance.</li>
+              <li className="flex gap-2">🕶️ <strong>Price Protection:</strong> Large trades don&rsquo;t alert the market until they are done.</li>
+            </ul>
+          </div>
+        ),
         infographic: "dark-pool-viz"
       },
       {
-        title: "Confidentiality = Security",
+        title: "Confidential Trading",
         type: "content",
-        content: "By keeping your intent private, you protect yourself from Maximum Extractable Value (MEV) bots that drain millions from retail users every day."
+        content: (
+          <div className="space-y-4">
+            <p>Anoncoin leverages <strong>Zero-Knowledge Proofs (ZKPs)</strong> to enable dark pools on Solana. This allows for &lsquo;Trustless Confidentiality&rsquo;&mdash;you don&rsquo;t have to trust a middleman; you trust the math.</p>
+            <div className="p-4 bg-white/5 border border-white/10 rounded-2xl">
+              <p className="text-xs font-mono text-purple-400 uppercase">A Cypherpunk standard:</p>
+              <p className="text-sm italic">&ldquo;Privacy is the power to selectively reveal oneself to the world.&rdquo;</p>
+            </div>
+          </div>
+        ),
       },
       {
-        title: "Anoncoin's Innovation",
+        title: "The MEV Shield",
         type: "content",
-        content: "Anoncoin brings institutional-grade Dark Pools to Solana, allowing anyone to trade with the same privacy as a multi-million dollar hedge fund."
-      },
-      {
-        title: "Zero-Knowledge Trading",
-        type: "content",
-        content: "Using ZK-proofs, Anoncoin can prove a trade is valid without revealing the size, price, or participants until it's too late for bots to react."
+        content: (
+          <div className="space-y-4">
+            <p>By using a Dark Pool, you effectively &lsquo;exit the glass house&rsquo;. Because the bots can never see your encrypted intents, they have nothing to front-run or sandwich.</p>
+            <p className="text-sm text-gray-400">Institutional traders use dark pools to move millions without moving the market price. Anoncoin brings this same protection to you.</p>
+          </div>
+        )
       }
     ],
     quiz: [
       {
-        question: "How does a Dark Pool protect a trader from front-running?",
+        question: "How does a Dark Pool protect against MEV bots?",
         options: [
-          "By making the transaction fee higher.",
-          "By hiding the order from the public book until it is settled.",
-          "By blocking all bots from the network."
+          "It bans bots from the platform.",
+          "It keeps transaction intent encrypted and hidden from the public mempool.",
+          "It uses faster servers than the bots."
         ],
         correctAnswer: 1,
-        explanation: "If a bot can't see your order in the book, it can't jump ahead of you to manipulate the price."
+        explanation: "Bots can only exploit what they can see. In a dark pool, your orders are invisible until settled."
+      },
+      {
+        question: "What technology allows Anoncoin to verify trades without revealing balances?",
+        options: [
+          "Cloud Computing.",
+          "Zero-Knowledge Proofs (ZKPs).",
+          "Public API logs."
+        ],
+        correctAnswer: 1,
+        explanation: "ZKPs allow a party to prove a statement is true without revealing any information beyond the statement's validity."
       }
     ]
   }
