@@ -4,8 +4,40 @@
 
 PRIVACY101 is a decentralized educational platform built on **Solana**. It teaches the fundamental principles of cypherpunk operations and blockchain privacy through an interactive, slide-based curriculum.
 
-![Homepage Screenshot](public/screenshots/homepage.png)
-![Lesson Page Screenshot](public/screenshots/lesson_page.png)
+## 📺 Project Demo
+### 🎥 Presentation Video
+[https://drive.google.com/file/d/14YcDFWejDX3U-uRmo3FxuUtVDqCmWaf-/view?usp=drive_link](https://drive.google.com/file/d/14YcDFWejDX3U-uRmo3FxuUtVDqCmWaf-/view?usp=drive_link)
+
+### 📸 Product Screenshots
+<div align="center">
+  <p><b>1. Privacy101 HomePage</b></p>
+  <img src="https://github.com/akshaydhayal/AnonCoin-PRIVACY101-Token/blob/main/demo/PRIVACY101-Educational-Airdrop%20(2).png" alt="Recipients Management" width="600">
+  <br>
+  <p><i>Lists all Privacy Lessons and show User's Progress and Rewards /i></p>
+  
+  <p><b>2. Privacy Lesson Page</b></p>
+  <img src="https://github.com/akshaydhayal/AnonCoin-PRIVACY101-Token/blob/main/demo/PRIVACY101-Educational-Airdrop%20(3).png" alt="Execute Payroll" width="600">
+  <br>
+  <p><i>Shows the different slides and contents of a lesson</i></p>
+
+  <p><b>3. Lesson's Quiz Section</b></p>
+  <img src="https://github.com/akshaydhayal/AnonCoin-PRIVACY101-Token/blob/main/demo/PRIVACY101-Educational-Airdrop%20(1).png" alt="Execute Payroll" width="600">
+  <br>
+  <p><i>Quiz section at end of slides in each lesson Page</i></p>
+
+  <p><b>4. Claim Lesson Reward Section</b></p>
+  <img src="https://github.com/akshaydhayal/AnonCoin-PRIVACY101-Token/blob/main/demo/PRIVACY101-Educational-Airdrop.png" alt="Execute Payroll" width="600">
+  <br>
+  <p><i>Claim Rewards after completing the quiz</i></p>
+
+  <p><b>5. PRIVV Token Rewards</b></p>
+  <img src="https://github.com/akshaydhayal/AnonCoin-PRIVACY101-Token/blob/main/demo/Screenshot%202026-02-10%20233622.png" alt="Execute Payroll" width="600">
+  <br>
+  <p><i>how much user got PRIVV reards on lesson claim</i></p>
+  
+</div>
+
+---
 
 ## 🚀 Features
 
