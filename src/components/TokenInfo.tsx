@@ -35,7 +35,7 @@ export const TokenInfo = () => {
     };
 
     return (
-        <section className="relative mt-20 mb-12">
+        <section className="relative mt-5 mb-1">
             <div className="absolute inset-x-0 -top-24 h-64 bg-gradient-to-b from-purple-500/5 to-transparent blur-3xl opacity-50 pointer-events-none" />
             
             <motion.div 
@@ -47,7 +47,7 @@ export const TokenInfo = () => {
                 <div className="flex items-center gap-4 mb-3">
                     <div className="h-[1px] flex-1 bg-gradient-to-r from-transparent via-white/10 to-transparent" />
                     <div className="flex flex-col items-center gap-1">
-                        <span className="text-[10px] font-mono text-purple-500 uppercase tracking-[0.5em] font-bold">Project AnonCoin Info</span>
+                        <span className="text-[12px] font-mono  text-purple-400 uppercase tracking-[0.5em] font-medium">Project AnonCoin Info</span>
                         {/* <span className="text-xs text-gray-500 font-mono tracking-widest uppercase">Protocol Integrity Layer</span> */}
                     </div>
                     <div className="h-[1px] flex-1 bg-gradient-to-r from-transparent via-white/10 to-transparent" />
@@ -87,9 +87,7 @@ export const TokenInfo = () => {
                     ))}
                 </div>
                 
-                <p className="text-center mt-6 text-[10px] font-mono text-gray-600 uppercase tracking-widest animate-pulse">
-                    Verified Cryptographic Metadata • Anonymous Infrastructure
-                </p>
+
             </motion.div>
         </section>
     );

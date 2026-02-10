@@ -163,6 +163,8 @@ function HomeContent() {
           </p>
         </motion.div>
 
+        <TokenInfo />
+
 
         {/* Progress Section */}
         <div className="mb-4">
@@ -288,11 +290,6 @@ function HomeContent() {
             </button>
           )}
 
-          {!allCompleted && connected && (
-            <p className="mt-4 text-xs font-mono text-gray-500 uppercase tracking-widest">
-              Unlock the secrets of privacy to claim
-            </p>
-          )}
         </motion.div>
       </section>
 
@@ -331,9 +328,9 @@ function HomeContent() {
         )}
       </AnimatePresence>
 
-      <TokenInfo />
+      {/* <TokenInfo /> */}
 
-      <footer className="relative z-10 py-12 px-8 border-t border-white/5 text-center text-gray-600 text-sm font-mono uppercase tracking-[0.2em] bg-black/50 backdrop-blur-md">
+      <footer className="relative z-10 py-6 px-8 border-t border-white/5 text-center text-gray-400 text-sm font-mono uppercase tracking-[0.2em] bg-black/50 backdrop-blur-md">
         &copy; 2026 PRIVACY101 • BUILT FOR SOLANA PRIVACY HACKATHON
       </footer>
     </main>
